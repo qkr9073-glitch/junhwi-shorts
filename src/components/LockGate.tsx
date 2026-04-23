@@ -37,6 +37,7 @@ export default function LockGate({
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setUnlocked(localStorage.getItem(storageKey) === "1");
@@ -151,20 +152,30 @@ export default function LockGate({
               🔑 비밀번호 입력
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                  setError("");
-                }}
-                placeholder="강의에서 공개된 비밀번호"
-                className="flex-1 px-4 py-3.5 sm:py-3 rounded-xl bg-white/95 text-ink font-bold placeholder:text-ink-soft/60 focus:outline-none focus:ring-4 focus:ring-white/30 transition text-[14px]"
-                autoComplete="off"
-                inputMode="text"
-                autoCapitalize="off"
-                autoCorrect="off"
-              />
+              <div className="relative flex-1">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={input}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    setError("");
+                  }}
+                  placeholder="강의에서 공개된 비밀번호"
+                  className="w-full pl-4 pr-12 py-3.5 sm:py-3 rounded-xl bg-white/95 text-ink font-bold placeholder:text-ink-soft/60 focus:outline-none focus:ring-4 focus:ring-white/30 transition text-[14px]"
+                  autoComplete="off"
+                  inputMode="text"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-lg hover:bg-ink/10 active:bg-ink/15 transition text-xl"
+                >
+                  {showPassword ? "🙈" : "👁"}
+                </button>
+              </div>
               <button
                 type="submit"
                 disabled={checking || !input.trim()}
