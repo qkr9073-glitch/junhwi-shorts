@@ -65,18 +65,35 @@ const KAKAO_URL = "https://open.kakao.com/o/gH4HL25h";
 export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-      <div className="text-center mb-8 sm:mb-12">
+      <div className="text-center mb-6 sm:mb-8">
         <div className="inline-block px-3 py-1 rounded-full bg-gold/10 text-gold-tip text-[11px] font-semibold mb-4 tracking-wide">
           💛 핸드인캥거루 무료 라이트 버전
         </div>
         <h1 className="text-3xl sm:text-5xl font-bold text-ink leading-tight">
           쇼츠 제작 도우미
         </h1>
-        <p className="mt-4 text-[15px] sm:text-base text-ink-muted max-w-lg mx-auto leading-relaxed">
-          샤오홍슈 · 더우인 바로가기부터 영상 다운로더, 대본 추출까지.
-          <br />
-          로그인 없이 브라우저에서 바로 사용하세요.
-        </p>
+      </div>
+
+      <div className="relative mb-10 rounded-3xl p-[1.5px] bg-gradient-to-br from-gold via-amber-300 to-gold/40 shadow-[0_8px_32px_rgba(200,134,10,0.12)]">
+        <div className="rounded-[calc(1.5rem-1.5px)] bg-gradient-to-br from-white via-bg-tip/40 to-white p-5 sm:p-6">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-gold to-amber-500 text-white flex items-center justify-center text-lg sm:text-xl shadow-md">
+              📣
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[11px] font-bold tracking-wider text-gold-tip mb-2 uppercase">
+                이렇게 사용해주세요
+              </div>
+              <p className="text-[13.5px] sm:text-[14.5px] text-ink leading-relaxed">
+                <b>무료강의 기준 라이트 실습</b>을 도와드릴게요! 아래 순서대로 따라가셔서 영상을 다운로드 받아보세요.
+                <br className="hidden sm:block" />
+                {" "}대본 추출은 <b className="text-gold">영상 대본 추출 도구</b>를 이용하시고, 스트레스 받을 땐 <b className="text-gold">캥거루 점프 게임</b>으로 쉬어가세요.
+                <br className="hidden sm:block" />
+                {" "}질문이 있으시다면 <b className="text-gold">쇼츠 커뮤니티 오픈채팅</b>에 들어오시면 됩니다!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 1. 플랫폼 바로가기 */}
