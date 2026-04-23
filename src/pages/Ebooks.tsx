@@ -4,6 +4,7 @@ type Ebook = {
   bullets: string[];
   href: string;
   gradient: string;
+  coverImg?: string;
 };
 
 const EBOOKS: Ebook[] = [
@@ -16,6 +17,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1F9gn-AZPC0sRMHoaKerK_y6soe_hl9ad/view?usp=sharing",
     gradient: "from-rose-400 to-pink-500",
+    coverImg: "/ebooks/1-mom.png",
   },
   {
     emoji: "⏱️",
@@ -26,6 +28,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1NrCo2Ovg6mdcsX3-eDCJIgtOUL2Or09T/view?usp=sharing",
     gradient: "from-red-500 to-rose-600",
+    coverImg: "/ebooks/2-10min.png",
   },
   {
     emoji: "🎣",
@@ -36,6 +39,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1RX1k2cjQWTKpFPg9_ywSTXfbQ2L_Uy47/view?usp=sharing",
     gradient: "from-amber-500 to-yellow-500",
+    coverImg: "/ebooks/3-hook.png",
   },
   {
     emoji: "📂",
@@ -46,6 +50,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/13uKHoiicv-vdBkvZtVQP717YJGHA0XXZ/view?usp=sharing",
     gradient: "from-slate-700 to-slate-900",
+    coverImg: "/ebooks/4-community.png",
   },
   {
     emoji: "🎯",
@@ -56,6 +61,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1jZi7S9xGxoL3fgHxjMF5-pySbyMjDQUF/view?usp=sharing",
     gradient: "from-fuchsia-500 to-purple-600",
+    coverImg: "/ebooks/5-conversion.png",
   },
   {
     emoji: "📊",
@@ -66,6 +72,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1_NMk6BUBRrRSZAIDbokGgOHGLjpcnd_W/view?usp=sharing",
     gradient: "from-emerald-500 to-teal-600",
+    coverImg: "/ebooks/6-strategy.png",
   },
   {
     emoji: "🛍️",
@@ -76,6 +83,7 @@ const EBOOKS: Ebook[] = [
     ],
     href: "https://drive.google.com/file/d/1n1DAKcRoMlofu9wSYKBX6Trx06vL0r9Q/view?usp=sharing",
     gradient: "from-orange-500 to-amber-600",
+    coverImg: "/ebooks/7-shopping.png",
   },
 ];
 
@@ -116,34 +124,57 @@ export default function Ebooks() {
               >
                 {/* 책 표지 (2:3) */}
                 <div className="relative aspect-[2/3] rounded-r-lg rounded-l-[3px] overflow-hidden shadow-[0_10px_28px_rgba(0,0,0,0.18)] transform-gpu transition-all duration-500 group-hover:-translate-y-2 group-hover:-rotate-[1.5deg] group-hover:shadow-[0_24px_50px_rgba(0,0,0,0.32)]">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+                  {/* 배경: 표지 이미지 있으면 이미지, 없으면 그라디언트 */}
+                  {b.coverImg ? (
+                    <>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+                      <img
+                        src={b.coverImg}
+                        alt={b.title}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </>
+                  ) : (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+                  )}
+
+                  {/* 책등(좌측) 그림자 — 항상 표시 */}
                   <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/45 via-black/10 to-transparent" />
+
+                  {/* 호버 시 광택 — 항상 표시 */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
-                  <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
-                  <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
-                        VOL. 0{i + 1}
-                      </div>
-                      <div className="text-[8px] font-extrabold tracking-wider bg-white/25 backdrop-blur px-2 py-0.5 rounded-full">
-                        FREE
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-[48px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
-                        {b.emoji}
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-[13px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
-                        {b.title}
-                      </h3>
-                      <div className="text-[8px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
-                        박준휘 · SHORTS SERIES
-                      </div>
-                    </div>
+
+                  {/* FREE 뱃지 — 항상 표시 */}
+                  <div className="absolute top-2.5 right-2.5 text-[8px] font-extrabold tracking-wider bg-white/95 text-ink backdrop-blur px-2 py-0.5 rounded-full shadow-sm">
+                    FREE
                   </div>
+
+                  {/* 표지 이미지 없을 때만: 그라디언트 위 장식 + 이모지 + 제목 오버레이 */}
+                  {!b.coverImg && (
+                    <>
+                      <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
+                      <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
+                      <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
+                        <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
+                          VOL. 0{i + 1}
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[48px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                            {b.emoji}
+                          </div>
+                        </div>
+                        <div>
+                          <h3 className="text-[13px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
+                            {b.title}
+                          </h3>
+                          <div className="text-[8px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
+                            박준휘 · SHORTS SERIES
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* 표지 아래 */}
