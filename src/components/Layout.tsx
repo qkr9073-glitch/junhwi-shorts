@@ -43,7 +43,7 @@ const NAV: NavItem[] = [
     to: "/ebooks",
     emoji: "📚",
     label: "전자책 서재",
-    desc: "무료 전자책 5권",
+    desc: "무료 전자책 7권",
     badge: "FREE",
   },
 ];

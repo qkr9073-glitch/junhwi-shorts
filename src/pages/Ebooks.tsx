@@ -6,57 +6,76 @@ type Ebook = {
   gradient: string;
 };
 
-// TODO: href에 실제 PDF 링크(Google Drive 공개 링크 등) 넣기
 const EBOOKS: Ebook[] = [
   {
-    emoji: "🚀",
-    title: "초보도 1주일 안에 쇼츠 시작하는 법",
+    emoji: "🌷",
+    title: "엄마에게 알려준 쇼츠 비법",
     bullets: [
-      "주제 선정부터 첫 업로드까지 7일 로드맵",
-      "채널 방향성 잡는 3가지 질문",
+      "디지털 비전문가도 따라할 수 있는 쇼츠 기초",
+      "가장 쉽게 설명한 입문자용 가이드",
     ],
-    href: "#",
-    gradient: "from-rose-500 to-pink-500",
+    href: "https://drive.google.com/file/d/1F9gn-AZPC0sRMHoaKerK_y6soe_hl9ad/view?usp=sharing",
+    gradient: "from-rose-400 to-pink-500",
   },
   {
-    emoji: "🔥",
-    title: "알고리즘을 부르는 후킹 문구 TOP 50",
+    emoji: "⏱️",
+    title: "초보를 위한 10분 쇼츠 수익화",
     bullets: [
-      "실제 100만 뷰 쇼츠에서 뽑은 카피 모음",
-      "상황별 · 톤별 템플릿으로 바로 적용",
+      "쇼츠 한 편을 10분 안에 만드는 템플릿",
+      "최단 경로로 가는 수익화 루트",
     ],
-    href: "#",
-    gradient: "from-orange-500 to-red-500",
+    href: "https://drive.google.com/file/d/1NrCo2Ovg6mdcsX3-eDCJIgtOUL2Or09T/view?usp=sharing",
+    gradient: "from-red-500 to-rose-600",
   },
   {
-    emoji: "🌏",
-    title: "해외 쇼츠 레퍼런스 완벽 탐색법",
+    emoji: "🎣",
+    title: "후킹멘트 전자책",
     bullets: [
-      "샤오홍슈 · 더우인 · 틱톡 서핑 루틴",
-      "번역 없이도 인사이트 뽑는 법",
+      "첫 3초 이탈률 잡는 훅 문구 템플릿",
+      "상황별 · 톤별 바로 적용 예시 모음",
     ],
-    href: "#",
+    href: "https://drive.google.com/file/d/1RX1k2cjQWTKpFPg9_ywSTXfbQ2L_Uy47/view?usp=sharing",
     gradient: "from-amber-500 to-yellow-500",
   },
   {
-    emoji: "🛡️",
-    title: "저작권 안전지대 완전 정복",
+    emoji: "📂",
+    title: "고수들의 쇼츠 소재 리스트",
     bullets: [
-      "사용 가능 vs 불가 영상 판단 기준",
-      "분쟁 예방 체크리스트 & 대처법",
+      "상위 크리에이터들이 쓰는 소재 · 주제 모음",
+      "장르별 바로 써먹는 아이디어 리스트",
     ],
-    href: "#",
-    gradient: "from-emerald-500 to-teal-500",
+    href: "https://drive.google.com/file/d/13uKHoiicv-vdBkvZtVQP717YJGHA0XXZ/view?usp=sharing",
+    gradient: "from-slate-700 to-slate-900",
   },
   {
-    emoji: "💰",
-    title: "쇼츠로 수익 만드는 5가지 루트",
+    emoji: "🎯",
+    title: "구독전환 전자책",
     bullets: [
-      "애드센스 외 숨겨진 수익 모델 공개",
-      "월 100만원 시작 구간별 전략",
+      "시청자를 구독자로 전환시키는 공식",
+      "쇼츠 속 CTA · 엔딩 설계 전략",
     ],
-    href: "#",
+    href: "https://drive.google.com/file/d/1jZi7S9xGxoL3fgHxjMF5-pySbyMjDQUF/view?usp=sharing",
     gradient: "from-fuchsia-500 to-purple-600",
+  },
+  {
+    emoji: "📊",
+    title: "쇼츠 운영 전략",
+    bullets: [
+      "업로드 주기 · 채널 포지셔닝 · 성장 루틴",
+      "장기적으로 꾸준히 크는 운영법",
+    ],
+    href: "https://drive.google.com/file/d/1_NMk6BUBRrRSZAIDbokGgOHGLjpcnd_W/view?usp=sharing",
+    gradient: "from-emerald-500 to-teal-600",
+  },
+  {
+    emoji: "🛍️",
+    title: "쇼핑 전자책",
+    bullets: [
+      "상품 · 쇼핑 소재 쇼츠로 수익 만드는 법",
+      "광고 · 제휴 연결 구조와 실전 사례",
+    ],
+    href: "https://drive.google.com/file/d/1n1DAKcRoMlofu9wSYKBX6Trx06vL0r9Q/view?usp=sharing",
+    gradient: "from-orange-500 to-amber-600",
   },
 ];
 
