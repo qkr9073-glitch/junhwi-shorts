@@ -2,10 +2,12 @@ type Blueprint = {
   href: string;
   flag: string;
   country: string;
+  countryEn: string;
   title: string;
   desc: string;
-  gradient: string;
   accent: string;
+  accentText: string;
+  accentBg: string;
 };
 
 const BLUEPRINTS: Blueprint[] = [
@@ -13,97 +15,146 @@ const BLUEPRINTS: Blueprint[] = [
     href: "https://chatgpt.com/g/g-6873caaad278819187211d5e9c2dbf00-migug-syoceu-seolgyedo",
     flag: "🇺🇸",
     country: "미국",
+    countryEn: "USA",
     title: "미국 쇼츠 설계도",
-    desc: "미국 쇼츠 트렌드와 문화 코드에 맞춘 아이디어·대본 설계 GPT",
-    gradient: "from-red-500 via-white to-blue-600",
-    accent: "text-red-600",
+    desc: "미국 쇼츠 트렌드와 문화 코드에 맞춘 아이디어 · 대본 설계 GPT",
+    accent: "from-red-500 via-white/80 to-blue-600",
+    accentText: "text-red-400",
+    accentBg: "from-red-500 to-blue-600",
   },
   {
     href: "https://chatgpt.com/g/g-6808e84393c08191aad85a172d094449-ilbon-syoceu-seolgyedo",
     flag: "🇯🇵",
     country: "일본",
+    countryEn: "JAPAN",
     title: "일본 쇼츠 설계도",
-    desc: "일본 시청자가 좋아하는 톤·포맷에 맞춰 쇼츠를 설계해주는 GPT",
-    gradient: "from-white via-pink-50 to-red-500",
-    accent: "text-red-600",
+    desc: "일본 시청자가 좋아하는 톤 · 포맷에 맞춰 쇼츠를 설계해주는 GPT",
+    accent: "from-rose-400 via-pink-300 to-red-500",
+    accentText: "text-rose-400",
+    accentBg: "from-rose-500 to-red-600",
   },
   {
     href: "https://chatgpt.com/g/g-6873cd20aa408191a0cd033496c62fa8-seupein-syoceu-seolgyedo",
     flag: "🇪🇸",
     country: "스페인",
+    countryEn: "SPAIN",
     title: "스페인 쇼츠 설계도",
-    desc: "스페인어권 쇼츠 감성과 리듬에 맞춘 대본·아이디어 설계 GPT",
-    gradient: "from-yellow-400 via-orange-400 to-red-500",
-    accent: "text-orange-600",
+    desc: "스페인어권 쇼츠 감성과 리듬에 맞춘 대본 · 아이디어 설계 GPT",
+    accent: "from-yellow-400 via-orange-400 to-red-500",
+    accentText: "text-amber-400",
+    accentBg: "from-yellow-500 to-red-600",
   },
   {
     href: "https://chatgpt.com/g/g-6873ce1826fc819188b583294defac2e-peurangseu-syoceu-seolgyedo",
     flag: "🇫🇷",
     country: "프랑스",
+    countryEn: "FRANCE",
     title: "프랑스 쇼츠 설계도",
-    desc: "프랑스 시청자 맞춤 위트·스타일로 쇼츠를 설계해주는 GPT",
-    gradient: "from-blue-600 via-white to-red-500",
-    accent: "text-blue-700",
+    desc: "프랑스 시청자 맞춤 위트 · 스타일로 쇼츠를 설계해주는 GPT",
+    accent: "from-blue-600 via-white/80 to-red-500",
+    accentText: "text-blue-400",
+    accentBg: "from-blue-600 to-red-500",
   },
 ];
 
 export default function Blueprints() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
       {/* 헤더 */}
-      <div className="mb-6">
-        <div className="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-semibold mb-3 tracking-wide">
-          🧭 국가별 GPT 도구 모음
+      <div className="mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 text-white text-[11px] font-extrabold tracking-wider shadow-[0_4px_16px_rgba(139,92,246,0.4)] mb-4">
+          🧭 GLOBAL GPT COLLECTION
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-ink leading-tight">
-          🗺️ 쇼츠 설계도
+        <h1 className="text-3xl sm:text-5xl font-black text-ink leading-[1.1]">
+          쇼츠{" "}
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
+            설계도
+          </span>
         </h1>
-        <p className="text-[13px] sm:text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
-          각 국가의 쇼츠 트렌드 · 문화에 맞춘 <b className="text-ink">아이디어·대본 설계 GPT</b>. 원하는 나라를 골라 바로 ChatGPT에서 사용하세요.
+        <p className="text-[13.5px] sm:text-[15px] text-ink-muted mt-3 max-w-2xl leading-relaxed">
+          각 국가의 쇼츠 트렌드 · 문화에 맞춘 <b className="text-ink">아이디어 · 대본 설계 GPT</b>. 원하는 나라를 골라 ChatGPT에서 바로 사용하세요.
         </p>
       </div>
 
-      {/* GPT 카드 4개 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-6">
-        {BLUEPRINTS.map((b) => (
+      {/* GPT 카드 4개 — 다크 프리미엄 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mb-8">
+        {BLUEPRINTS.map((b, i) => (
           <a
             key={b.href}
             href={b.href}
             target="_blank"
             rel="noreferrer"
-            className="group relative block rounded-3xl p-[2px] bg-gradient-to-br shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.18)] transition-all overflow-hidden"
-            style={{ backgroundImage: "linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.02))" }}
+            className="group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-[0_14px_40px_rgba(15,23,42,0.25)] hover:shadow-[0_28px_60px_rgba(15,23,42,0.4)] hover:-translate-y-1.5 transition-all duration-500"
           >
-            <div className="relative rounded-[calc(1.5rem-2px)] bg-white overflow-hidden h-full">
-              {/* 상단 국기 그라디언트 배너 */}
-              <div className={`relative h-20 sm:h-24 bg-gradient-to-br ${b.gradient} flex items-center justify-center overflow-hidden`}>
-                <div className="absolute inset-0 bg-black/5" />
-                <div className="relative text-5xl sm:text-6xl drop-shadow-md group-hover:scale-110 transition-transform duration-500">
-                  {b.flag}
+            {/* 상단 국기 컬러 아크 */}
+            <div className={`absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${b.accent}`} />
+            <div className={`absolute -top-32 -right-32 w-72 h-72 bg-gradient-to-br ${b.accentBg} opacity-30 blur-3xl rounded-full group-hover:opacity-50 transition-opacity duration-700`} />
+
+            {/* 배경 국기 워터마크 */}
+            <div className="absolute -bottom-10 -right-6 text-[180px] leading-none opacity-[0.08] group-hover:opacity-[0.15] group-hover:scale-110 transition-all duration-700 rotate-[8deg] pointer-events-none select-none">
+              {b.flag}
+            </div>
+
+            {/* 미세 그리드 패턴 */}
+            <div
+              className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+
+            {/* 호버 광택 */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            <div className="relative p-6 sm:p-7">
+              {/* 넘버 + GPT 뱃지 */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-[10px] font-black tracking-[0.3em] text-white/40">
+                  0{i + 1} — BLUEPRINT
                 </div>
-                <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur text-white text-[9px] font-extrabold tracking-wider">
-                  GPT
+                <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur border border-white/15">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[9px] font-extrabold tracking-wider text-white">CUSTOM GPT</span>
                 </div>
               </div>
 
-              {/* 본문 */}
-              <div className="p-4 sm:p-5">
-                <div className={`text-[10.5px] font-bold tracking-[0.18em] uppercase mb-1 ${b.accent}`}>
-                  {b.country} · SHORTS BLUEPRINT
+              {/* 국가 이름 + 국기 */}
+              <div className="flex items-center gap-4 mb-4">
+                <div className="text-5xl sm:text-6xl drop-shadow-lg group-hover:scale-110 group-hover:rotate-[-5deg] transition-transform duration-500">
+                  {b.flag}
                 </div>
-                <h3 className="text-base sm:text-lg font-extrabold text-ink group-hover:text-gold transition leading-tight mb-1.5">
-                  {b.title}
-                </h3>
-                <p className="text-[12.5px] text-ink-muted leading-relaxed mb-3">
-                  {b.desc}
-                </p>
-                <div className="inline-flex items-center gap-1.5 text-[12.5px] font-bold text-ink group-hover:text-gold group-hover:gap-2.5 transition-all">
-                  <span className="w-5 h-5 rounded-md bg-black text-white flex items-center justify-center text-[9px] font-black">
-                    AI
-                  </span>
-                  ChatGPT에서 열기
-                  <span>→</span>
+                <div className="min-w-0">
+                  <div className={`text-[10.5px] font-black tracking-[0.3em] uppercase ${b.accentText} mb-0.5`}>
+                    {b.countryEn}
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl font-black text-white leading-none tracking-tight">
+                    {b.country}
+                  </h3>
                 </div>
+              </div>
+
+              {/* 부제 */}
+              <div className="text-[13px] sm:text-[14px] text-white/70 font-semibold mb-4">
+                {b.title}
+              </div>
+
+              {/* 구분선 */}
+              <div className={`h-[2px] w-14 bg-gradient-to-r ${b.accentBg} rounded-full mb-4`} />
+
+              {/* 설명 */}
+              <p className="text-[12.5px] sm:text-[13px] text-white/60 leading-relaxed mb-5 min-h-[40px]">
+                {b.desc}
+              </p>
+
+              {/* CTA 버튼 */}
+              <div className="inline-flex items-center gap-2 pl-2 pr-4 py-2 rounded-xl bg-white text-ink text-[13px] font-extrabold shadow-[0_6px_20px_rgba(0,0,0,0.3)] group-hover:shadow-[0_10px_28px_rgba(0,0,0,0.5)] group-hover:gap-3 transition-all">
+                <span className="w-6 h-6 rounded-md bg-black text-white flex items-center justify-center text-[9px] font-black">
+                  AI
+                </span>
+                ChatGPT에서 열기
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
           </a>
