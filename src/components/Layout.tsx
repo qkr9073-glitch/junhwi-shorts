@@ -61,8 +61,8 @@ export default function Layout() {
   return (
     <div className="min-h-[100dvh] flex flex-col lg:flex-row bg-bg-base">
       {/* ===== 모바일 상단 바 ===== */}
-      <header className="lg:hidden sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-borderc-base">
-        <div className="px-4 py-3 flex items-center gap-2">
+      <header className="lg:hidden sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-borderc-base">
+        <div className="px-4 pt-2.5 pb-2 flex items-center gap-2">
           <NavLink to="/" className="flex items-center gap-2 shrink-0">
             <img src="/logo.png" alt="" className="w-8 h-8 rounded-lg" />
             <div className="min-w-0">
@@ -77,7 +77,7 @@ export default function Layout() {
         </div>
         {/* 모바일 가로 스크롤 네비 */}
         <div
-          className="flex gap-2 overflow-x-auto px-4 pb-3"
+          className="flex gap-2 overflow-x-auto px-4 pb-2.5"
           style={{ scrollbarWidth: "none" }}
         >
           {NAV.map((item) => (
@@ -87,15 +87,15 @@ export default function Layout() {
               end={item.to === "/"}
               className={({ isActive }) =>
                 [
-                  "shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 transition-all whitespace-nowrap",
+                  "shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 transition-all whitespace-nowrap",
                   isActive
-                    ? "bg-gradient-to-br from-gold/15 to-amber-50 border-gold"
+                    ? "bg-gradient-to-br from-gold/15 to-amber-50 border-gold shadow-sm"
                     : "bg-white border-borderc-base",
                 ].join(" ")
               }
             >
-              <span className="text-lg">{item.emoji}</span>
-              <span className="text-[12.5px] font-bold text-ink">{item.label}</span>
+              <span className="text-base">{item.emoji}</span>
+              <span className="text-[12.5px] font-extrabold text-ink">{item.label}</span>
               {item.badge && (
                 <span className="px-1.5 py-0.5 rounded-full bg-gold/15 text-gold-tip text-[9px] font-extrabold tracking-wider">
                   {item.badge}
@@ -233,36 +233,36 @@ export default function Layout() {
         />
         <div className="relative z-10">
           {/* 모든 페이지 공통 상단 HOT 배너 */}
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8">
             <a
               href={KAKAO_URL}
               target="_blank"
               rel="noreferrer"
-              className="relative block group rounded-3xl overflow-hidden"
+              className="relative block group rounded-2xl sm:rounded-3xl overflow-hidden"
             >
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300 blur-lg opacity-60 group-hover:opacity-90 animate-pulse" />
-              <div className="relative rounded-3xl bg-gradient-to-br from-[#FEE500] via-[#FFD900] to-[#FEE500] p-4 sm:p-5 shadow-[0_12px_40px_rgba(254,229,0,0.5)] ring-2 ring-yellow-400 group-hover:scale-[1.005] transition-transform">
-                <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 px-2.5 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold tracking-wider animate-bounce shadow-md">
+              <div className="absolute -inset-1 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300 blur-lg opacity-50 sm:opacity-60 group-hover:opacity-90 animate-pulse" />
+              <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#FEE500] via-[#FFD900] to-[#FEE500] p-3 sm:p-5 shadow-[0_8px_24px_rgba(254,229,0,0.4)] sm:shadow-[0_12px_40px_rgba(254,229,0,0.5)] ring-2 ring-yellow-400 group-hover:scale-[1.005] transition-transform">
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-red-500 text-white text-[9px] sm:text-[10px] font-bold tracking-wider animate-bounce shadow-md">
                   🔥 HOT
                 </div>
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#3C1E1E] flex items-center justify-center text-2xl sm:text-3xl shadow-inner">
+                <div className="flex items-center gap-2.5 sm:gap-4">
+                  <div className="shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-[#3C1E1E] flex items-center justify-center text-xl sm:text-3xl shadow-inner">
                     💬
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <div className="text-[10.5px] sm:text-[11.5px] font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
+                    <div className="hidden sm:block text-[11.5px] font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
                       👋 쇼츠 크리에이터라면 필수!
                     </div>
-                    <div className="text-sm sm:text-lg font-extrabold text-[#3C1E1E] leading-tight">
+                    <div className="text-[13px] sm:text-lg font-extrabold text-[#3C1E1E] leading-tight pr-12 sm:pr-0">
                       박준휘 쇼츠 커뮤니티 오픈채팅
                     </div>
-                    <div className="text-[11px] sm:text-[12.5px] text-[#3C1E1E]/80 mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">
-                      실시간 꿀팁 · 트렌드 공유 · 질문 답변 · 함께 성장하는 동료들
+                    <div className="text-[11px] sm:text-[12.5px] text-[#3C1E1E]/75 mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">
+                      실시간 꿀팁 · 트렌드 공유 · 질문 답변
                     </div>
                   </div>
                   <div className="shrink-0">
-                    <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#3C1E1E] text-[#FEE500] text-xs sm:text-sm font-bold whitespace-nowrap group-hover:bg-black transition shadow-md">
-                      무료 입장 →
+                    <div className="px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#3C1E1E] text-[#FEE500] text-[11px] sm:text-sm font-extrabold whitespace-nowrap group-hover:bg-black transition shadow-md">
+                      입장 →
                     </div>
                   </div>
                 </div>

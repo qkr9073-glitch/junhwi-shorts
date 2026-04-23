@@ -101,15 +101,15 @@ const LANDSCAPE_BOOKS: Ebook[] = [
 // 카드 하단 정보 + CTA (프리미엄 느낌)
 function BookInfo({ book }: { book: Ebook }) {
   return (
-    <div className="mt-5 px-1">
+    <div className="mt-3 sm:mt-5 px-0.5 sm:px-1">
       {/* 제목 */}
-      <h3 className="text-[15px] sm:text-base font-extrabold text-ink leading-tight mb-1 group-hover:text-gold transition-colors break-keep line-clamp-2">
+      <h3 className="text-[13px] sm:text-base font-extrabold text-ink leading-tight mb-1 group-hover:text-gold transition-colors break-keep line-clamp-2 min-h-[36px] sm:min-h-0">
         {book.title}
       </h3>
       {/* 금선 구분 */}
-      <div className="h-[2px] w-10 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full mb-3" />
+      <div className="h-[2px] w-8 sm:w-10 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full mb-2 sm:mb-3" />
       {/* 요약 */}
-      <ul className="space-y-1.5 text-[12.5px] text-ink-muted leading-relaxed mb-4 min-h-[52px]">
+      <ul className="hidden sm:block space-y-1.5 text-[12.5px] text-ink-muted leading-relaxed mb-4 min-h-[52px]">
         {book.bullets.map((line, j) => (
           <li key={j} className="flex gap-1.5">
             <span className="text-amber-500 shrink-0 font-bold">✓</span>
@@ -117,13 +117,17 @@ function BookInfo({ book }: { book: Ebook }) {
           </li>
         ))}
       </ul>
+      {/* 모바일: 요약 한 줄 요약 */}
+      <p className="sm:hidden text-[11px] text-ink-muted leading-snug mb-2.5 line-clamp-2 min-h-[30px]">
+        {book.bullets[0]}
+      </p>
       {/* 프리미엄 CTA */}
       <div className="relative w-full overflow-hidden rounded-xl shadow-[0_6px_18px_rgba(251,191,36,0.35)] group-hover:shadow-[0_10px_28px_rgba(251,191,36,0.55)] transition-shadow">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500" />
         <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-1000" />
-        <div className="relative flex items-center justify-center gap-2 py-2.5 px-3 text-white font-extrabold">
-          <span className="text-base">📥</span>
-          <span className="text-[13px] tracking-wide">무료로 받기</span>
+        <div className="relative flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-2 sm:px-3 text-white font-extrabold">
+          <span className="text-sm sm:text-base">📥</span>
+          <span className="text-[12px] sm:text-[13px] tracking-wide">무료로 받기</span>
           <span className="group-hover:translate-x-1 transition-transform">→</span>
         </div>
       </div>
@@ -170,7 +174,7 @@ function EbooksContent() {
       </div>
 
       {/* 세로형 5권 — 상단 그리드 */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-8 mb-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-10 sm:mb-12">
         {PORTRAIT_BOOKS.map((b, i) => (
           <a
             key={b.href}

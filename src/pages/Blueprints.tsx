@@ -132,9 +132,9 @@ function BlueprintsContent() {
             {/* 호버 광택 */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="relative p-6 sm:p-7">
+            <div className="relative p-5 sm:p-7">
               {/* 넘버 + GPT 뱃지 */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
                 <div className="text-[10px] font-black tracking-[0.3em] text-white/40">
                   0{i + 1} — BLUEPRINT
                 </div>
@@ -145,7 +145,7 @@ function BlueprintsContent() {
               </div>
 
               {/* 국가 이름 + 국기 */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                 <div className="text-5xl sm:text-6xl drop-shadow-lg group-hover:scale-110 group-hover:rotate-[-5deg] transition-transform duration-500">
                   {b.flag}
                 </div>
@@ -160,20 +160,20 @@ function BlueprintsContent() {
               </div>
 
               {/* 부제 */}
-              <div className="text-[13px] sm:text-[14px] text-white/70 font-semibold mb-4">
+              <div className="text-[13px] sm:text-[14px] text-white/70 font-semibold mb-3 sm:mb-4">
                 {b.title}
               </div>
 
               {/* 구분선 */}
-              <div className={`h-[2px] w-14 bg-gradient-to-r ${b.accentBg} rounded-full mb-4`} />
+              <div className={`h-[2px] w-14 bg-gradient-to-r ${b.accentBg} rounded-full mb-3 sm:mb-4`} />
 
               {/* 설명 */}
-              <p className="text-[12.5px] sm:text-[13px] text-white/60 leading-relaxed mb-5 min-h-[40px]">
+              <p className="text-[12.5px] sm:text-[13px] text-white/60 leading-relaxed mb-4 sm:mb-5">
                 {b.desc}
               </p>
 
               {/* CTA 버튼 */}
-              <div className="inline-flex items-center gap-2 pl-2 pr-4 py-2 rounded-xl bg-white text-ink text-[13px] font-extrabold shadow-[0_6px_20px_rgba(0,0,0,0.3)] group-hover:shadow-[0_10px_28px_rgba(0,0,0,0.5)] group-hover:gap-3 transition-all">
+              <div className="inline-flex items-center gap-2 pl-2 pr-4 py-2.5 rounded-xl bg-white text-ink text-[13px] font-extrabold shadow-[0_6px_20px_rgba(0,0,0,0.3)] group-hover:shadow-[0_10px_28px_rgba(0,0,0,0.5)] group-hover:gap-3 transition-all">
                 <span className="w-6 h-6 rounded-md bg-black text-white flex items-center justify-center text-[9px] font-black">
                   AI
                 </span>

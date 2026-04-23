@@ -91,20 +91,20 @@ export default function LockGate({
           🔒
         </div>
 
-        <div className="relative p-6 sm:p-10 text-white">
+        <div className="relative p-5 sm:p-10 text-white">
           {/* 라벨 */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur border border-white/20 mb-5">
+          <div className="inline-flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-white/15 backdrop-blur border border-white/20 mb-4 sm:mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-300 animate-pulse" />
-            <span className="text-[10px] font-black tracking-[0.25em] uppercase">
+            <span className="text-[9.5px] sm:text-[10px] font-black tracking-[0.22em] sm:tracking-[0.25em] uppercase">
               {lockLabel}
             </span>
           </div>
 
           {/* 타이틀 */}
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-3 sm:gap-4 mb-3">
             <div className="text-5xl sm:text-6xl drop-shadow-lg">🔒</div>
-            <div>
-              <div className="text-[11px] font-bold tracking-[0.2em] text-white/60 uppercase mb-0.5">
+            <div className="min-w-0">
+              <div className="text-[10.5px] sm:text-[11px] font-bold tracking-[0.2em] text-white/60 uppercase mb-0.5">
                 LOCKED
               </div>
               <h1 className="text-2xl sm:text-4xl font-black leading-tight">
@@ -114,32 +114,32 @@ export default function LockGate({
           </div>
 
           {/* 부제 */}
-          <p className="text-[14px] sm:text-[15px] text-white/80 leading-relaxed mb-1.5 font-semibold">
+          <p className="text-[13.5px] sm:text-[15px] text-white/85 leading-relaxed mb-1.5 font-semibold">
             {lockSubtitle}
           </p>
-          <p className="text-[12.5px] sm:text-sm text-white/60 leading-relaxed mb-6 max-w-2xl">
+          <p className="text-[12.5px] sm:text-sm text-white/65 leading-relaxed mb-5 sm:mb-6 max-w-2xl">
             {lockDescription}
           </p>
 
           {/* "이렇게 받아가세요" 가이드 박스 */}
-          <div className="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4 sm:p-5 mb-6">
+          <div className="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4 sm:p-5 mb-5 sm:mb-6">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-lg">🎓</span>
-              <span className="text-[12px] font-black tracking-wider text-white/90 uppercase">
+              <span className="text-[11.5px] sm:text-[12px] font-black tracking-wider text-white/90 uppercase">
                 이렇게 받아가세요
               </span>
             </div>
-            <ol className="space-y-2 text-[12.5px] sm:text-[13px] text-white/85 leading-relaxed">
+            <ol className="space-y-2.5 sm:space-y-2 text-[13px] text-white/85 leading-relaxed">
               <li className="flex items-start gap-2.5">
-                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">1</span>
+                <span className="shrink-0 w-6 h-6 sm:w-5 sm:h-5 rounded-full bg-white/20 flex items-center justify-center text-[11px] sm:text-[10px] font-black">1</span>
                 <span>박준휘쌤 <b className="text-white">무료강의</b>를 끝까지 시청하세요</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">2</span>
+                <span className="shrink-0 w-6 h-6 sm:w-5 sm:h-5 rounded-full bg-white/20 flex items-center justify-center text-[11px] sm:text-[10px] font-black">2</span>
                 <span>강의 중 공개되는 <b className="text-white">비밀번호</b>를 메모</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">3</span>
+                <span className="shrink-0 w-6 h-6 sm:w-5 sm:h-5 rounded-full bg-white/20 flex items-center justify-center text-[11px] sm:text-[10px] font-black">3</span>
                 <span>아래 입력창에 비번 입력 → <b className="text-white">잠금 해제!</b></span>
               </li>
             </ol>
@@ -147,10 +147,10 @@ export default function LockGate({
 
           {/* 비번 입력 */}
           <form onSubmit={handleSubmit} className="mb-4">
-            <div className="text-[11px] font-black tracking-[0.2em] text-white/60 uppercase mb-2">
+            <div className="text-[10.5px] sm:text-[11px] font-black tracking-[0.2em] text-white/60 uppercase mb-2">
               🔑 비밀번호 입력
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={input}
@@ -159,13 +159,16 @@ export default function LockGate({
                   setError("");
                 }}
                 placeholder="강의에서 공개된 비밀번호"
-                className="flex-1 px-4 py-3 rounded-xl bg-white/95 text-ink font-bold placeholder:text-ink-soft/60 focus:outline-none focus:ring-4 focus:ring-white/30 transition"
+                className="flex-1 px-4 py-3.5 sm:py-3 rounded-xl bg-white/95 text-ink font-bold placeholder:text-ink-soft/60 focus:outline-none focus:ring-4 focus:ring-white/30 transition text-[14px]"
                 autoComplete="off"
+                inputMode="text"
+                autoCapitalize="off"
+                autoCorrect="off"
               />
               <button
                 type="submit"
                 disabled={checking || !input.trim()}
-                className="px-5 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 text-white font-extrabold text-sm shadow-[0_6px_18px_rgba(251,191,36,0.4)] hover:shadow-[0_10px_28px_rgba(251,191,36,0.6)] transition disabled:opacity-50 whitespace-nowrap"
+                className="px-5 sm:px-6 py-3.5 sm:py-3 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 text-white font-extrabold text-[14px] sm:text-sm shadow-[0_6px_18px_rgba(251,191,36,0.4)] hover:shadow-[0_10px_28px_rgba(251,191,36,0.6)] transition disabled:opacity-50 whitespace-nowrap"
               >
                 해제 →
               </button>
