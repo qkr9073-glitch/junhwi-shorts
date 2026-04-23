@@ -225,26 +225,46 @@ export default function Layout() {
           className="pointer-events-none select-none fixed bottom-0 right-0 w-[40vw] max-w-[360px] opacity-[0.04] z-0"
         />
         <div className="relative z-10">
+          {/* 모든 페이지 공통 상단 HOT 배너 */}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+            <a
+              href={KAKAO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="relative block group rounded-3xl overflow-hidden"
+            >
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300 blur-lg opacity-60 group-hover:opacity-90 animate-pulse" />
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#FEE500] via-[#FFD900] to-[#FEE500] p-4 sm:p-5 shadow-[0_12px_40px_rgba(254,229,0,0.5)] ring-2 ring-yellow-400 group-hover:scale-[1.005] transition-transform">
+                <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 px-2.5 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold tracking-wider animate-bounce shadow-md">
+                  🔥 HOT
+                </div>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#3C1E1E] flex items-center justify-center text-2xl sm:text-3xl shadow-inner">
+                    💬
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="text-[10.5px] sm:text-[11.5px] font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
+                      👋 쇼츠 크리에이터라면 필수!
+                    </div>
+                    <div className="text-sm sm:text-lg font-extrabold text-[#3C1E1E] leading-tight">
+                      박준휘 쇼츠 커뮤니티 오픈채팅
+                    </div>
+                    <div className="text-[11px] sm:text-[12.5px] text-[#3C1E1E]/80 mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">
+                      실시간 꿀팁 · 트렌드 공유 · 질문 답변 · 함께 성장하는 동료들
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#3C1E1E] text-[#FEE500] text-xs sm:text-sm font-bold whitespace-nowrap group-hover:bg-black transition shadow-md">
+                      무료 입장 →
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
           <Outlet />
         </div>
-
-        {/* 모바일 전용 플로팅 카카오 버튼 */}
-        <a
-          href={KAKAO_URL}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="박준휘 쇼츠 커뮤니티 오픈채팅 입장"
-          className="lg:hidden group fixed bottom-5 right-5 z-40 flex items-center gap-2 pl-3 pr-4 py-3 rounded-full bg-[#FEE500] hover:bg-[#FFD900] text-[#3C1E1E] font-bold text-sm shadow-[0_10px_30px_rgba(254,229,0,0.6)] ring-2 ring-yellow-400/70 hover:-translate-y-0.5 transition"
-        >
-          <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#3C1E1E] text-[#FEE500] text-base">
-            💬
-            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-red-500 ring-2 ring-[#FEE500] animate-pulse" />
-          </span>
-          <span className="leading-tight">
-            <span className="block text-[10px] font-bold opacity-80">오픈채팅</span>
-            <span className="block">입장 →</span>
-          </span>
-        </a>
 
         {/* 푸터 (모바일/PC 공통, 사이드바 밖 컨텐츠 영역 하단) */}
         <footer className="relative z-10 mt-12 border-t border-borderc-base bg-white/60">
