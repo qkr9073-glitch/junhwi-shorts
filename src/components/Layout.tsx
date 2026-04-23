@@ -33,6 +33,13 @@ const NAV: NavItem[] = [
     desc: "쉬어가는 미니 게임",
   },
   {
+    to: "/blueprints",
+    emoji: "🗺️",
+    label: "쇼츠 설계도",
+    desc: "국가별 GPT 도구 모음",
+    badge: "GPT",
+  },
+  {
     to: "/ebooks",
     emoji: "📚",
     label: "전자책 서재",

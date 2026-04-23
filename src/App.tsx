@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Subtitle from "./pages/Subtitle";
 import Game from "./pages/Game";
 import Ebooks from "./pages/Ebooks";
+import Blueprints from "./pages/Blueprints";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="subtitle" element={<Subtitle />} />
           <Route path="game" element={<Game />} />
           <Route path="ebooks" element={<Ebooks />} />
+          <Route path="blueprints" element={<Blueprints />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
