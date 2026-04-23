@@ -13,9 +13,6 @@ type Ebook = {
 const EBOOKS_PASSWORD_HASH =
   "09a50eb32d657e70cbd4f225a0da226bfacb0202c0592cb816ef349674e071ed";
 
-// 자동 공개: 2026-04-30 00:00 KST
-const UNLOCK_DATE = new Date("2026-04-30T00:00:00+09:00");
-
 // 세로형 표지 (5권) — 상단 큰 그리드
 const PORTRAIT_BOOKS: Ebook[] = [
   {
@@ -139,12 +136,11 @@ export default function Ebooks() {
     <LockGate
       storageKey="unlock_ebooks"
       passwordHash={EBOOKS_PASSWORD_HASH}
-      unlockDate={UNLOCK_DATE}
       lockLabel="1차 공개 · EBOOKS"
       lockTitle="무료 전자책 서재"
       lockSubtitle="박준휘쌤이 직접 정리한 무료 전자책 7권"
-      lockDescription="쇼츠 입문부터 수익화까지 — 본 섹션은 무료강의 수강자에게 먼저 공개되며, 2026년 4월 30일부터 모두에게 자동 오픈됩니다."
-      hint="강의 중 공개되는 1차 비밀번호를 입력하세요. 강의를 놓치셨다면 카카오 오픈채팅에서도 안내드려요."
+      lockDescription="쇼츠 입문부터 수익화까지 — 본 섹션은 무료강의를 끝까지 시청한 수강자에게만 공개됩니다."
+      hint="강의 중간에 공개되는 1차 비밀번호를 입력하세요."
       gradientFrom="from-rose-500"
       gradientTo="to-fuchsia-700"
     >

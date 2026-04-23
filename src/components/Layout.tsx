@@ -36,14 +36,14 @@ const NAV: NavItem[] = [
     to: "/blueprints",
     emoji: "🗺️",
     label: "쇼츠 설계도",
-    desc: "국가별 GPT · 2차 비번",
+    desc: "국가별 GPT (수강자 전용)",
     badge: "🔒 2차",
   },
   {
     to: "/ebooks",
     emoji: "📚",
     label: "전자책 서재",
-    desc: "무료 전자책 7권 · 1차 비번",
+    desc: "전자책 7권 (수강자 전용)",
     badge: "🔒 1차",
   },
 ];

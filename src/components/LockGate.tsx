@@ -3,7 +3,6 @@ import { useEffect, useState, type ReactNode } from "react";
 type Props = {
   storageKey: string;
   passwordHash: string;
-  unlockDate: Date;
   lockLabel: string;
   lockTitle: string;
   lockSubtitle: string;
@@ -22,24 +21,9 @@ async function sha256(text: string): Promise<string> {
     .join("");
 }
 
-function useCountdown(target: Date) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const diff = Math.max(0, target.getTime() - now);
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-  return { days, hours, minutes, seconds, expired: diff <= 0 };
-}
-
 export default function LockGate({
   storageKey,
   passwordHash,
-  unlockDate,
   lockLabel,
   lockTitle,
   lockSubtitle,
@@ -53,19 +37,10 @@ export default function LockGate({
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(false);
-  const countdown = useCountdown(unlockDate);
 
   useEffect(() => {
-    if (localStorage.getItem(storageKey) === "1") {
-      setUnlocked(true);
-      return;
-    }
-    if (new Date() >= unlockDate) {
-      setUnlocked(true);
-      return;
-    }
-    setUnlocked(false);
-  }, [storageKey, unlockDate]);
+    setUnlocked(localStorage.getItem(storageKey) === "1");
+  }, [storageKey]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -146,35 +121,34 @@ export default function LockGate({
             {lockDescription}
           </p>
 
-          {/* 카운트다운 박스 */}
+          {/* "이렇게 받아가세요" 가이드 박스 */}
           <div className="rounded-2xl bg-white/10 backdrop-blur border border-white/15 p-4 sm:p-5 mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">📅</span>
-              <span className="text-[12px] font-bold tracking-wider text-white/90">
-                자동 공개 · 2026년 4월 30일 00:00
+              <span className="text-lg">🎓</span>
+              <span className="text-[12px] font-black tracking-wider text-white/90 uppercase">
+                이렇게 받아가세요
               </span>
             </div>
-            {countdown.expired ? (
-              <div className="text-[13px] font-bold text-emerald-300">
-                ✨ 오픈 되었습니다! 새로고침 해주세요.
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 sm:gap-3">
-                <TimeBox label="DAYS" value={countdown.days} />
-                <div className="text-2xl sm:text-3xl font-black text-white/40">:</div>
-                <TimeBox label="HOURS" value={countdown.hours} />
-                <div className="text-2xl sm:text-3xl font-black text-white/40">:</div>
-                <TimeBox label="MIN" value={countdown.minutes} />
-                <div className="text-2xl sm:text-3xl font-black text-white/40">:</div>
-                <TimeBox label="SEC" value={countdown.seconds} />
-              </div>
-            )}
+            <ol className="space-y-2 text-[12.5px] sm:text-[13px] text-white/85 leading-relaxed">
+              <li className="flex items-start gap-2.5">
+                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">1</span>
+                <span>박준휘쌤 <b className="text-white">무료강의</b>를 끝까지 시청하세요</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">2</span>
+                <span>강의 중 공개되는 <b className="text-white">비밀번호</b>를 메모</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-black">3</span>
+                <span>아래 입력창에 비번 입력 → <b className="text-white">잠금 해제!</b></span>
+              </li>
+            </ol>
           </div>
 
           {/* 비번 입력 */}
           <form onSubmit={handleSubmit} className="mb-4">
             <div className="text-[11px] font-black tracking-[0.2em] text-white/60 uppercase mb-2">
-              🔑 무료강의 수강자용 비밀번호
+              🔑 비밀번호 입력
             </div>
             <div className="flex gap-2">
               <input
@@ -184,7 +158,7 @@ export default function LockGate({
                   setInput(e.target.value);
                   setError("");
                 }}
-                placeholder="비밀번호 입력"
+                placeholder="강의에서 공개된 비밀번호"
                 className="flex-1 px-4 py-3 rounded-xl bg-white/95 text-ink font-bold placeholder:text-ink-soft/60 focus:outline-none focus:ring-4 focus:ring-white/30 transition"
                 autoComplete="off"
               />
@@ -209,19 +183,6 @@ export default function LockGate({
             <span>{hint}</span>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function TimeBox({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex-1 text-center">
-      <div className="text-2xl sm:text-4xl font-black leading-none tabular-nums">
-        {String(value).padStart(2, "0")}
-      </div>
-      <div className="text-[8.5px] sm:text-[9px] font-bold tracking-[0.2em] text-white/50 mt-1">
-        {label}
       </div>
     </div>
   );

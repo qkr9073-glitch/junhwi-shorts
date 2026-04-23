@@ -4,9 +4,6 @@ import LockGate from "../components/LockGate";
 const BLUEPRINTS_PASSWORD_HASH =
   "a9912d7be9902bcf47e52f2ea54c16072f3f16ed3cec23170b6aa216aa2f9df1";
 
-// 자동 공개: 2026-04-30 00:00 KST
-const UNLOCK_DATE = new Date("2026-04-30T00:00:00+09:00");
-
 type Blueprint = {
   href: string;
   flag: string;
@@ -71,12 +68,11 @@ export default function Blueprints() {
     <LockGate
       storageKey="unlock_blueprints"
       passwordHash={BLUEPRINTS_PASSWORD_HASH}
-      unlockDate={UNLOCK_DATE}
       lockLabel="2차 공개 · BLUEPRINTS"
       lockTitle="쇼츠 설계도"
       lockSubtitle="국가별 쇼츠 설계 GPT 4종 (미국 · 일본 · 스페인 · 프랑스)"
-      lockDescription="각 국가의 쇼츠 트렌드에 맞춘 아이디어·대본 설계 GPT. 본 섹션은 무료강의 후반부에 공개되는 2차 비밀번호로 열 수 있으며, 2026년 4월 30일부터 모두에게 자동 오픈됩니다."
-      hint="강의 후반부에 공개되는 2차 비밀번호를 입력하세요. 강의를 놓치셨다면 카카오 오픈채팅에서도 안내드려요."
+      lockDescription="각 국가의 쇼츠 트렌드에 맞춘 아이디어·대본 설계 GPT. 본 섹션은 무료강의를 끝까지 시청한 수강자에게만 공개됩니다."
+      hint="강의 후반부에 공개되는 2차 비밀번호를 입력하세요."
       gradientFrom="from-indigo-600"
       gradientTo="to-purple-800"
     >
