@@ -62,6 +62,68 @@ const DOWNLOADER_URL = "https://xhs-downloader-sage.vercel.app/";
 
 const KAKAO_URL = "https://open.kakao.com/o/gH4HL25h";
 
+type Ebook = {
+  emoji: string;
+  title: string;
+  bullets: string[];
+  href: string;
+  gradient: string;
+};
+
+// TODO: href 에 실제 PDF 링크(Google Drive / Dropbox / 자체 서버) 넣어주세요
+const EBOOKS: Ebook[] = [
+  {
+    emoji: "🚀",
+    title: "초보도 1주일 안에 쇼츠 시작하는 법",
+    bullets: [
+      "주제 선정부터 첫 업로드까지 7일 로드맵",
+      "채널 방향성 잡는 3가지 질문",
+    ],
+    href: "#",
+    gradient: "from-rose-500 to-pink-500",
+  },
+  {
+    emoji: "🔥",
+    title: "알고리즘을 부르는 후킹 문구 TOP 50",
+    bullets: [
+      "실제 100만 뷰 쇼츠에서 뽑은 카피 모음",
+      "상황별 · 톤별 템플릿으로 바로 적용",
+    ],
+    href: "#",
+    gradient: "from-orange-500 to-red-500",
+  },
+  {
+    emoji: "🌏",
+    title: "해외 쇼츠 레퍼런스 완벽 탐색법",
+    bullets: [
+      "샤오홍슈 · 더우인 · 틱톡 서핑 루틴",
+      "번역 없이도 인사이트 뽑는 법",
+    ],
+    href: "#",
+    gradient: "from-amber-500 to-yellow-500",
+  },
+  {
+    emoji: "🛡️",
+    title: "저작권 안전지대 완전 정복",
+    bullets: [
+      "사용 가능 vs 불가 영상 판단 기준",
+      "분쟁 예방 체크리스트 & 대처법",
+    ],
+    href: "#",
+    gradient: "from-emerald-500 to-teal-500",
+  },
+  {
+    emoji: "💰",
+    title: "쇼츠로 수익 만드는 5가지 루트",
+    bullets: [
+      "애드센스 외 숨겨진 수익 모델 공개",
+      "월 100만원 시작 구간별 전략",
+    ],
+    href: "#",
+    gradient: "from-fuchsia-500 to-purple-600",
+  },
+];
+
 export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -95,6 +157,42 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* 오픈채팅 배너 - 안내문 바로 아래 */}
+      <a
+        href={KAKAO_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="relative block group rounded-3xl overflow-hidden mb-10"
+      >
+        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300 blur-lg opacity-60 group-hover:opacity-90 animate-pulse" />
+        <div className="relative rounded-3xl bg-gradient-to-br from-[#FEE500] via-[#FFD900] to-[#FEE500] p-5 sm:p-6 shadow-[0_12px_40px_rgba(254,229,0,0.5)] ring-2 ring-yellow-400 group-hover:scale-[1.01] transition-transform">
+          <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold tracking-wider animate-bounce shadow-md">
+            🔥 HOT
+          </div>
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#3C1E1E] flex items-center justify-center text-3xl sm:text-4xl shadow-inner">
+              💬
+            </div>
+            <div className="flex-1 min-w-0 text-left">
+              <div className="text-[11px] sm:text-xs font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
+                👋 쇼츠 크리에이터라면 필수!
+              </div>
+              <div className="text-base sm:text-xl font-extrabold text-[#3C1E1E] leading-tight">
+                박준휘 쇼츠 커뮤니티 오픈채팅
+              </div>
+              <div className="text-[12px] sm:text-[13px] text-[#3C1E1E]/80 mt-1 leading-snug">
+                실시간 꿀팁 · 트렌드 공유 · 질문 답변 · 함께 성장하는 동료들
+              </div>
+            </div>
+            <div className="shrink-0 flex flex-col items-center gap-1">
+              <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#3C1E1E] text-[#FEE500] text-xs sm:text-sm font-bold whitespace-nowrap group-hover:bg-black transition shadow-md">
+                무료 입장 →
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
 
       {/* 1. 플랫폼 바로가기 */}
       <div className="mb-4 text-[11px] font-bold tracking-wider text-ink-soft uppercase">
@@ -261,41 +359,58 @@ export default function Home() {
         ))}
       </div>
 
-      {/* 5. 오픈채팅 배너 (HOT) */}
-      <a
-        href={KAKAO_URL}
-        target="_blank"
-        rel="noreferrer"
-        className="relative block group rounded-3xl overflow-hidden"
-      >
-        <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-300 blur-lg opacity-60 group-hover:opacity-90 animate-pulse" />
-        <div className="relative rounded-3xl bg-gradient-to-br from-[#FEE500] via-[#FFD900] to-[#FEE500] p-5 sm:p-6 shadow-[0_12px_40px_rgba(254,229,0,0.5)] ring-2 ring-yellow-400 group-hover:scale-[1.01] transition-transform">
-          <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold tracking-wider animate-bounce shadow-md">
-            🔥 HOT
+      {/* 5. 무료 전자책 선물 */}
+      <div className="relative mb-10">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 text-white text-[11px] font-bold tracking-wider shadow-md mb-3">
+            🎁 박준휘쌤이 드리는 선물
           </div>
-          <div className="flex items-center gap-4 sm:gap-5">
-            <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#3C1E1E] flex items-center justify-center text-3xl sm:text-4xl shadow-inner">
-              💬
-            </div>
-            <div className="flex-1 min-w-0 text-left">
-              <div className="text-[11px] sm:text-xs font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
-                👋 쇼츠 크리에이터라면 필수!
-              </div>
-              <div className="text-base sm:text-xl font-extrabold text-[#3C1E1E] leading-tight">
-                박준휘 쇼츠 커뮤니티 오픈채팅
-              </div>
-              <div className="text-[12px] sm:text-[13px] text-[#3C1E1E]/80 mt-1 leading-snug">
-                실시간 꿀팁 · 트렌드 공유 · 질문 답변 · 함께 성장하는 동료들
-              </div>
-            </div>
-            <div className="shrink-0 flex flex-col items-center gap-1">
-              <div className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#3C1E1E] text-[#FEE500] text-xs sm:text-sm font-bold whitespace-nowrap group-hover:bg-black transition shadow-md">
-                무료 입장 →
-              </div>
-            </div>
-          </div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink">
+            무료 전자책 <span className="bg-gradient-to-r from-rose-500 to-fuchsia-500 bg-clip-text text-transparent">5권</span>
+          </h2>
+          <p className="text-[13px] sm:text-sm text-ink-muted mt-2">
+            쇼츠 입문부터 수익화까지 — 혼자 해도 막히지 않게, 제가 가진 자료 그대로 드립니다.
+          </p>
         </div>
-      </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {EBOOKS.map((b, i) => (
+            <a
+              key={i}
+              href={b.href}
+              target="_blank"
+              rel="noreferrer"
+              className={`group relative block rounded-3xl p-[1.5px] bg-gradient-to-br ${b.gradient} hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all overflow-hidden`}
+            >
+              <div className="relative rounded-[calc(1.5rem-1.5px)] bg-white p-5 h-full flex flex-col">
+                <div className="absolute top-3 right-3 text-[10px] font-bold tracking-wider bg-bg-base border border-borderc-base text-ink-muted px-2 py-0.5 rounded-full">
+                  #{i + 1}
+                </div>
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${b.gradient} flex items-center justify-center text-2xl mb-3 shadow-md group-hover:scale-110 group-hover:rotate-6 transition-transform`}>
+                  {b.emoji}
+                </div>
+                <div className="text-[15px] font-extrabold text-ink leading-snug mb-2">
+                  {b.title}
+                </div>
+                <ul className="space-y-1 text-[12px] text-ink-muted leading-relaxed mb-4 flex-1">
+                  {b.bullets.map((line, j) => (
+                    <li key={j} className="flex gap-1.5">
+                      <span className="text-gold shrink-0">✓</span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r ${b.gradient} text-white text-xs font-bold group-hover:gap-2.5 transition-all shadow-sm`}>
+                  🎁 선물 받기
+                  <span>→</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div className="mt-4 text-center text-[11px] text-ink-soft">
+          ※ 전자책은 개인 학습용 무료 자료입니다. 재배포 · 상업적 이용을 금지합니다.
+        </div>
+      </div>
     </div>
   );
 }
