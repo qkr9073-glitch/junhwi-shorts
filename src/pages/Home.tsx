@@ -164,6 +164,12 @@ export default function Home() {
                   개인 학습용으로만 사용해 주세요.
                 </span>
               </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-600 shrink-0" />
+                <span>
+                  <b>🔒 영상 판별기는 유료 수강생 전용</b>입니다. 본 라이트 버전에는 포함되지 않으니 양해 부탁드립니다.
+                </span>
+              </li>
             </ul>
           </div>
         </div>

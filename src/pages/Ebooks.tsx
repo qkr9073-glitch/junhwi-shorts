@@ -7,7 +7,8 @@ type Ebook = {
   coverImg?: string;
 };
 
-const EBOOKS: Ebook[] = [
+// 세로형 표지 (5권) — 상단 큰 그리드
+const PORTRAIT_BOOKS: Ebook[] = [
   {
     emoji: "🌷",
     title: "엄마에게 알려준 쇼츠 비법",
@@ -42,28 +43,6 @@ const EBOOKS: Ebook[] = [
     coverImg: "/ebooks/3-hook.png",
   },
   {
-    emoji: "📂",
-    title: "고수들의 쇼츠 소재 리스트",
-    bullets: [
-      "상위 크리에이터들이 쓰는 소재 · 주제 모음",
-      "장르별 바로 써먹는 아이디어 리스트",
-    ],
-    href: "https://drive.google.com/file/d/13uKHoiicv-vdBkvZtVQP717YJGHA0XXZ/view?usp=sharing",
-    gradient: "from-slate-700 to-slate-900",
-    coverImg: "/ebooks/4-community.png",
-  },
-  {
-    emoji: "🎯",
-    title: "구독전환 전자책",
-    bullets: [
-      "시청자를 구독자로 전환시키는 공식",
-      "쇼츠 속 CTA · 엔딩 설계 전략",
-    ],
-    href: "https://drive.google.com/file/d/1jZi7S9xGxoL3fgHxjMF5-pySbyMjDQUF/view?usp=sharing",
-    gradient: "from-fuchsia-500 to-purple-600",
-    coverImg: "/ebooks/5-conversion.png",
-  },
-  {
     emoji: "📊",
     title: "쇼츠 운영 전략",
     bullets: [
@@ -87,44 +66,173 @@ const EBOOKS: Ebook[] = [
   },
 ];
 
+// 가로형 표지 (2권) — 하단 와이드 카드
+const LANDSCAPE_BOOKS: Ebook[] = [
+  {
+    emoji: "📂",
+    title: "고수들의 쇼츠 소재 리스트",
+    bullets: [
+      "상위 크리에이터들이 쓰는 소재 · 주제 모음",
+      "장르별 바로 써먹는 아이디어 리스트",
+    ],
+    href: "https://drive.google.com/file/d/13uKHoiicv-vdBkvZtVQP717YJGHA0XXZ/view?usp=sharing",
+    gradient: "from-slate-700 to-slate-900",
+    coverImg: "/ebooks/4-community.png",
+  },
+  {
+    emoji: "🎯",
+    title: "구독전환 전자책",
+    bullets: [
+      "시청자를 구독자로 전환시키는 공식",
+      "쇼츠 속 CTA · 엔딩 설계 전략",
+    ],
+    href: "https://drive.google.com/file/d/1jZi7S9xGxoL3fgHxjMF5-pySbyMjDQUF/view?usp=sharing",
+    gradient: "from-fuchsia-500 to-purple-600",
+    coverImg: "/ebooks/5-conversion.png",
+  },
+];
+
+// 카드 하단 정보 + CTA (프리미엄 느낌)
+function BookInfo({ book }: { book: Ebook }) {
+  return (
+    <div className="mt-5 px-1">
+      {/* 제목 */}
+      <h3 className="text-[15px] sm:text-base font-extrabold text-ink leading-tight mb-1 group-hover:text-gold transition-colors break-keep line-clamp-2">
+        {book.title}
+      </h3>
+      {/* 금선 구분 */}
+      <div className="h-[2px] w-10 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full mb-3" />
+      {/* 요약 */}
+      <ul className="space-y-1.5 text-[12.5px] text-ink-muted leading-relaxed mb-4 min-h-[52px]">
+        {book.bullets.map((line, j) => (
+          <li key={j} className="flex gap-1.5">
+            <span className="text-amber-500 shrink-0 font-bold">✓</span>
+            <span className="line-clamp-2">{line}</span>
+          </li>
+        ))}
+      </ul>
+      {/* 프리미엄 CTA */}
+      <div className="relative w-full overflow-hidden rounded-xl shadow-[0_6px_18px_rgba(251,191,36,0.35)] group-hover:shadow-[0_10px_28px_rgba(251,191,36,0.55)] transition-shadow">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500" />
+        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-1000" />
+        <div className="relative flex items-center justify-center gap-2 py-2.5 px-3 text-white font-extrabold">
+          <span className="text-base">📥</span>
+          <span className="text-[13px] tracking-wide">무료로 받기</span>
+          <span className="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Ebooks() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-      {/* 헤더 */}
-      <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-fuchsia-500 text-white text-[11px] font-bold tracking-wider shadow-md mb-3">
-          🎁 박준휘쌤이 드리는 선물
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      {/* 헤더 — 더 임팩트있게 */}
+      <div className="mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white text-[11px] font-extrabold tracking-wider shadow-[0_4px_16px_rgba(251,191,36,0.4)] mb-4">
+          🎁 박준휘쌤이 드리는 선물 · PREMIUM FREE
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-ink">
+        <h1 className="text-3xl sm:text-5xl font-black text-ink leading-[1.1]">
           무료 전자책{" "}
-          <span className="bg-gradient-to-r from-rose-500 to-fuchsia-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent">
             서재
           </span>
         </h1>
-        <p className="text-[13px] sm:text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
+        <p className="text-[13.5px] sm:text-[15px] text-ink-muted mt-3 max-w-2xl leading-relaxed">
           쇼츠 입문부터 수익화까지 — 혼자 해도 막히지 않게 박준휘쌤이 직접 정리한 자료.
-          표지를 클릭해서 원하는 책을 받아가세요.
+          <b className="text-ink"> 표지를 클릭해 원하는 책을 지금 받아가세요.</b>
         </p>
       </div>
 
-      {/* 책장 */}
-      <div className="relative">
-        <div
-          className="-mx-4 sm:mx-0 overflow-x-auto sm:overflow-visible pb-6 sm:pb-0"
-          style={{ scrollbarWidth: "none" }}
-        >
-          <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 sm:gap-6 px-4 sm:px-0 min-w-max sm:min-w-0 snap-x snap-mandatory">
-            {EBOOKS.map((b, i) => (
-              <a
-                key={i}
-                href={b.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group block w-[165px] sm:w-auto shrink-0 sm:shrink snap-start"
-              >
-                {/* 책 표지 (2:3) */}
-                <div className="relative aspect-[2/3] rounded-r-lg rounded-l-[3px] overflow-hidden shadow-[0_10px_28px_rgba(0,0,0,0.18)] transform-gpu transition-all duration-500 group-hover:-translate-y-2 group-hover:-rotate-[1.5deg] group-hover:shadow-[0_24px_50px_rgba(0,0,0,0.32)]">
-                  {/* 배경: 표지 이미지 있으면 이미지, 없으면 그라디언트 */}
+      {/* 세로형 5권 — 상단 그리드 */}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-8 mb-12">
+        {PORTRAIT_BOOKS.map((b, i) => (
+          <a
+            key={b.href}
+            href={b.href}
+            target="_blank"
+            rel="noreferrer"
+            className="group block"
+          >
+            {/* 세로 표지 (2:3) — 크게 + 프리미엄 링 */}
+            <div className="relative rounded-r-xl rounded-l-[4px] p-[2px] bg-gradient-to-br from-amber-400/70 via-yellow-300/40 to-amber-600/60 shadow-[0_14px_36px_rgba(0,0,0,0.18)] group-hover:shadow-[0_28px_60px_rgba(251,191,36,0.35)] transition-all duration-500 group-hover:-translate-y-3 group-hover:-rotate-[1.5deg] transform-gpu">
+              <div className="relative aspect-[2/3] rounded-r-[calc(0.75rem-2px)] rounded-l-[3px] overflow-hidden">
+                {b.coverImg ? (
+                  <>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+                    <img
+                      src={b.coverImg}
+                      alt={b.title}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </>
+                ) : (
+                  <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+                )}
+                {/* 책등 */}
+                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/50 via-black/15 to-transparent" />
+                {/* 호버 광택 */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* FREE 뱃지 */}
+                <div className="absolute top-3 right-3 text-[9px] font-black tracking-wider bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-2.5 py-1 rounded-full shadow-md">
+                  FREE
+                </div>
+                {/* 이미지 없을 때만 오버레이 */}
+                {!b.coverImg && (
+                  <>
+                    <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
+                    <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
+                    <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
+                      <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
+                        VOL. 0{i + 1}
+                      </div>
+                      <div className="text-center">
+                        <div className="text-[56px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                          {b.emoji}
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="text-[14px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
+                          {b.title}
+                        </h3>
+                        <div className="text-[8.5px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
+                          박준휘 · SHORTS SERIES
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+            <BookInfo book={b} />
+          </a>
+        ))}
+      </div>
+
+      {/* 가로형 2권 — 하단 와이드 카드 */}
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="h-[2px] flex-1 bg-gradient-to-r from-transparent via-amber-300 to-amber-400" />
+          <div className="text-[11px] font-black tracking-[0.2em] text-amber-600 uppercase">
+            ⭐ Special Edition
+          </div>
+          <div className="h-[2px] flex-1 bg-gradient-to-l from-transparent via-amber-300 to-amber-400" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {LANDSCAPE_BOOKS.map((b) => (
+            <a
+              key={b.href}
+              href={b.href}
+              target="_blank"
+              rel="noreferrer"
+              className="group block"
+            >
+              {/* 가로 표지 (16:9) — 와이드 + 프리미엄 링 */}
+              <div className="relative rounded-2xl p-[2px] bg-gradient-to-br from-amber-400/70 via-yellow-300/40 to-amber-600/60 shadow-[0_14px_36px_rgba(0,0,0,0.18)] group-hover:shadow-[0_28px_60px_rgba(251,191,36,0.35)] transition-all duration-500 group-hover:-translate-y-2 transform-gpu">
+                <div className="relative aspect-[16/9] rounded-[calc(1rem-2px)] overflow-hidden">
                   {b.coverImg ? (
                     <>
                       <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
@@ -138,72 +246,35 @@ export default function Ebooks() {
                   ) : (
                     <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
                   )}
-
-                  {/* 책등(좌측) 그림자 — 항상 표시 */}
-                  <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/45 via-black/10 to-transparent" />
-
-                  {/* 호버 시 광택 — 항상 표시 */}
+                  {/* 호버 광택 */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                  {/* FREE 뱃지 — 항상 표시 */}
-                  <div className="absolute top-2.5 right-2.5 text-[8px] font-extrabold tracking-wider bg-white/95 text-ink backdrop-blur px-2 py-0.5 rounded-full shadow-sm">
+                  {/* FREE 뱃지 */}
+                  <div className="absolute top-3 right-3 text-[9px] font-black tracking-wider bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-2.5 py-1 rounded-full shadow-md">
                     FREE
                   </div>
-
-                  {/* 표지 이미지 없을 때만: 그라디언트 위 장식 + 이모지 + 제목 오버레이 */}
-                  {!b.coverImg && (
-                    <>
-                      <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
-                      <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
-                      <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
-                        <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
-                          VOL. 0{i + 1}
-                        </div>
-                        <div className="text-center">
-                          <div className="text-[48px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
-                            {b.emoji}
-                          </div>
-                        </div>
-                        <div>
-                          <h3 className="text-[13px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
-                            {b.title}
-                          </h3>
-                          <div className="text-[8px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
-                            박준휘 · SHORTS SERIES
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
                 </div>
-
-                {/* 표지 아래 */}
-                <div className="mt-3 px-1">
-                  <ul className="space-y-1 text-[11px] text-ink-muted leading-relaxed mb-2 min-h-[36px]">
-                    {b.bullets.map((line, j) => (
-                      <li key={j} className="flex gap-1.5">
-                        <span className="text-gold shrink-0">✓</span>
-                        <span className="line-clamp-2">{line}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="inline-flex items-center gap-1 text-[11.5px] font-bold text-gold-tip group-hover:text-gold group-hover:gap-2 transition-all">
-                    📥 무료 다운로드
-                    <span>→</span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="sm:hidden text-center text-[11px] text-ink-soft mt-1">
-          ← 좌우로 밀어서 책장 구경하기 →
+              </div>
+              <BookInfo book={b} />
+            </a>
+          ))}
         </div>
       </div>
 
-      <div className="mt-8 p-4 rounded-2xl bg-bg-tip/60 border border-amber-200 text-[12.5px] text-amber-900 leading-relaxed">
-        <b>📌 안내</b> — 전자책은 개인 학습용 무료 자료입니다. 재배포 · 상업적 이용을 금지합니다.
+      {/* 하단 안내 */}
+      <div className="relative rounded-2xl overflow-hidden border-2 border-amber-200 bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-50 p-5">
+        <div className="flex items-start gap-3">
+          <div className="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-500 text-white flex items-center justify-center text-lg shadow-md">
+            📌
+          </div>
+          <div className="flex-1">
+            <div className="text-[13px] sm:text-sm font-extrabold text-amber-900 mb-1">
+              이용 안내
+            </div>
+            <p className="text-[12.5px] text-amber-900 leading-relaxed">
+              전자책은 <b>박준휘쌤 수강생 전용 무료 자료</b>입니다. 재배포 · 복제 · 상업적 이용을 엄격히 금지하며, 개인 학습용으로만 사용해 주세요.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
