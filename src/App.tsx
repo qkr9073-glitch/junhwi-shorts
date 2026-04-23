@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import Subtitle from "./pages/Subtitle";
+import Game from "./pages/Game";
 
 export default function App() {
   return (
@@ -8,6 +10,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="subtitle" element={<Subtitle />} />
+          <Route path="game" element={<Game />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

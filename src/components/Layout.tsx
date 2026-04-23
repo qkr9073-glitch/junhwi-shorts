@@ -12,10 +12,10 @@ export default function Layout() {
             <img src="/logo.png" alt="" className="w-8 h-8 rounded-lg" />
             <div>
               <div className="text-[15px] font-bold text-ink group-hover:text-gold transition">
-                중국 쇼츠 실습 허브
+                쇼츠 제작 도우미
               </div>
               <div className="text-[10px] text-ink-soft -mt-0.5">
-                by 핸드인캥거루 · 샤오홍슈 · 더우인 자료실
+                by 핸드인캥거루 · 무료 라이트 버전
               </div>
             </div>
           </Link>
