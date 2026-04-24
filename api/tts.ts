@@ -59,7 +59,12 @@ const ALLOWED_VOICES = new Set([
 
 const MAX_CHARS = 2000;
 const MAX_SEGMENTS = 40;
-const CONCURRENCY = 6;
+const CONCURRENCY = 3;
+const SEGMENT_RETRY = 3;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
 
 function clampRate(v: unknown): string {
   const n = typeof v === "number" ? v : parseInt(String(v ?? 0), 10);
@@ -131,7 +136,7 @@ async function synthesizeOne(
     voice,
     rate,
     pitch,
-    connectionTimeout: 15_000,
+    connectionTimeout: 12_000,
   });
   const chunks: Buffer[] = [];
   for await (const chunk of communicate.stream()) {
@@ -140,6 +145,30 @@ async function synthesizeOne(
     }
   }
   return Buffer.concat(chunks);
+}
+
+// 개별 구간 실패 시 재시도 (MS 쪽 간헐적 빈 응답 대응)
+async function synthesizeWithRetry(
+  text: string,
+  voice: string,
+  rate: string,
+  pitch: string
+): Promise<Buffer> {
+  let lastErr: unknown = null;
+  for (let attempt = 1; attempt <= SEGMENT_RETRY; attempt++) {
+    try {
+      const buf = await synthesizeOne(text, voice, rate, pitch);
+      if (buf.length > 0) return buf;
+      lastErr = new Error("empty audio");
+    } catch (e) {
+      lastErr = e;
+    }
+    if (attempt < SEGMENT_RETRY) {
+      // 지수 백오프: 400ms, 1200ms
+      await sleep(400 * Math.pow(3, attempt - 1));
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error("synthesis failed");
 }
 
 async function synthesizeAll(
@@ -152,11 +181,13 @@ async function synthesizeAll(
   for (let i = 0; i < segments.length; i += CONCURRENCY) {
     const batch = segments.slice(i, i + CONCURRENCY);
     const batchRes = await Promise.all(
-      batch.map((seg) => synthesizeOne(seg, voice, rate, pitch))
+      batch.map((seg) => synthesizeWithRetry(seg, voice, rate, pitch))
     );
     for (let j = 0; j < batchRes.length; j++) {
       results[i + j] = batchRes[j];
     }
+    // 배치 사이 MS 쪽 throttle 방지용 짧은 쉼
+    if (i + CONCURRENCY < segments.length) await sleep(150);
   }
   return results;
 }
