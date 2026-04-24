@@ -17,15 +17,12 @@ const VOICES: Record<Lang, Voice[]> = {
   ],
   ja: [
     { id: "ja-JP-NanamiNeural", name: "Nanami (ナナミ)", gender: "여", tag: "표준·부드러움" },
-    { id: "ja-JP-AoiNeural", name: "Aoi (アオイ)", gender: "여", tag: "밝고 어린 톤" },
     { id: "ja-JP-KeitaNeural", name: "Keita (ケイタ)", gender: "남", tag: "차분·신뢰감" },
-    { id: "ja-JP-DaichiNeural", name: "Daichi (ダイチ)", gender: "남", tag: "젊고 자연스러움" },
   ],
   en: [
     { id: "en-US-JennyNeural", name: "Jenny", gender: "여", tag: "친근·대화체 · 브이로그" },
     { id: "en-US-AriaNeural", name: "Aria", gender: "여", tag: "명료·광고·내레이션" },
     { id: "en-US-GuyNeural", name: "Guy", gender: "남", tag: "스탠다드·뉴스" },
-    { id: "en-US-DavisNeural", name: "Davis", gender: "남", tag: "젊고 캐주얼" },
   ],
   zh: [
     { id: "zh-CN-XiaoxiaoNeural", name: "晓晓 (Xiaoxiao)", gender: "여", tag: "표준·만능" },

@@ -50,13 +50,10 @@ const ALLOWED_VOICES = new Set([
   // 일본어
   "ja-JP-NanamiNeural",
   "ja-JP-KeitaNeural",
-  "ja-JP-AoiNeural",
-  "ja-JP-DaichiNeural",
   // 영어 (US)
   "en-US-JennyNeural",
   "en-US-GuyNeural",
   "en-US-AriaNeural",
-  "en-US-DavisNeural",
   // 중국어 (Mandarin)
   "zh-CN-XiaoxiaoNeural",
   "zh-CN-YunxiNeural",
