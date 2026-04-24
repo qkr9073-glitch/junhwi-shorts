@@ -14,29 +14,6 @@ const QUESTIONS = [
   "하루에 투자 가능하신 시간은 어느 정도이신가요?",
 ];
 
-const FEATURES = [
-  {
-    emoji: "🎯",
-    title: "당신에게 맞는 전략 추천",
-    desc: "경험 · 나이 · 시간을 바탕으로 딱 맞는 쇼츠 방향을 골라줍니다.",
-  },
-  {
-    emoji: "🧭",
-    title: "플랫폼 선택 가이드",
-    desc: "유튜브 쇼츠 · 틱톡 · 샤오홍슈 · 더우인 중 무엇부터 시작해야 할지 안내.",
-  },
-  {
-    emoji: "⏱️",
-    title: "시간 배분 플랜",
-    desc: "하루 30분 / 1시간 / 3시간, 가용 시간에 맞춘 실천 루틴을 제안해요.",
-  },
-  {
-    emoji: "📚",
-    title: "다음 단계 연결",
-    desc: "추천받은 전략에 따라 이 사이트의 전자책 · 설계도 · TTS 도구를 어떻게 활용할지 알려줍니다.",
-  },
-];
-
 export default function Roadmap() {
   const [copied, setCopied] = useState(false);
 
@@ -100,8 +77,7 @@ export default function Roadmap() {
             </div>
             <p className="text-[13.5px] sm:text-[14.5px] text-ink leading-relaxed font-semibold">
               쇼츠 부업은{" "}
-              <b className="text-gold-tip">사람마다 맞는 방법이 다릅니다.</b>{" "}
-              누군가는 샤오홍슈로, 누군가는 유튜브 쇼츠로 시작해야 해요.
+              <b className="text-gold-tip">사람마다 맞는 방법이 다릅니다.</b>
             </p>
             <p className="text-[12.5px] sm:text-[13px] text-ink-muted mt-1.5 leading-relaxed">
               이 봇은 당신의 경험 · 나이 · 가용 시간을 바탕으로 가장 빨리 결과
@@ -109,33 +85,6 @@ export default function Roadmap() {
               다른 도구(대본 추출 · TTS 성우 등)를 쓰기 전에 먼저 돌려보세요.
             </p>
           </div>
-        </div>
-      </div>
-
-      {/* 기능 */}
-      <div className="mb-5">
-        <div className="text-[11px] font-bold tracking-[0.18em] text-ink-soft uppercase mb-3 px-1">
-          이런 걸 알려줍니다
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-          {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-borderc-base hover:border-gold/40 transition"
-            >
-              <div className="shrink-0 w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-xl">
-                {f.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[13.5px] font-extrabold text-ink leading-tight">
-                  {f.title}
-                </div>
-                <div className="text-[11.5px] text-ink-muted mt-1 leading-relaxed">
-                  {f.desc}
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
