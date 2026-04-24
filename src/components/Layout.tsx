@@ -15,6 +15,13 @@ type NavItem = {
 const NAV: NavItem[] = [
   {
     to: "/",
+    emoji: "🎯",
+    label: "새로부업 로드맵",
+    desc: "5가지 질문으로 내 맞춤 전략 찾기",
+    badge: "START",
+  },
+  {
+    to: "/tts",
     emoji: "🎙️",
     label: "AI 성우 (TTS)",
     desc: "한·일·영·중 4개국 내레이션",
