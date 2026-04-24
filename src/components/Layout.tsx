@@ -15,22 +15,16 @@ type NavItem = {
 const NAV: NavItem[] = [
   {
     to: "/",
-    emoji: "🎯",
-    label: "실습 가이드",
-    desc: "플랫폼 · 로그인 · 다운로드",
+    emoji: "🎙️",
+    label: "AI 성우 (TTS)",
+    desc: "한·일·영·중 4개국 내레이션",
+    badge: "AI",
   },
   {
     to: "/subtitle",
     emoji: "📝",
     label: "영상 대본 추출",
     desc: "AI 자막·대본 뽑기",
-    badge: "AI",
-  },
-  {
-    to: "/tts",
-    emoji: "🎙️",
-    label: "AI 성우 (TTS)",
-    desc: "한·일·영·중 4개국 내레이션",
     badge: "AI",
   },
   {
