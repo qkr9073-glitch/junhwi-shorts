@@ -69,8 +69,6 @@ export default function Tts() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [audioUrl, setAudioUrl] = useState<string>("");
-  const [srt, setSrt] = useState<string>("");
-  const [segmentCount, setSegmentCount] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const lastUrlRef = useRef<string>("");
 
@@ -102,26 +100,15 @@ export default function Tts() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: trimmed, voice: voiceId, rate, pitch }),
       });
-      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error ?? `요청 실패 (${res.status})`);
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error ?? `요청 실패 (${res.status})`);
       }
-      if (typeof data.audio !== "string") {
-        throw new Error("응답 형식 오류");
-      }
-      // base64 → Blob
-      const binStr = atob(data.audio);
-      const bytes = new Uint8Array(binStr.length);
-      for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
-      const blob = new Blob([bytes], { type: data.mime ?? "audio/mpeg" });
+      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
       lastUrlRef.current = url;
       setAudioUrl(url);
-      setSrt(typeof data.srt === "string" ? data.srt : "");
-      setSegmentCount(
-        typeof data.segmentCount === "number" ? data.segmentCount : 0
-      );
       setTimeout(() => {
         audioRef.current?.play().catch(() => {});
       }, 50);
@@ -131,21 +118,6 @@ export default function Tts() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function handleDownloadSrt() {
-    if (!srt) return;
-    const blob = new Blob([srt], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    const langLabel = LANG_META[lang].label;
-    const v = voices.find((x) => x.id === voiceId)?.name ?? voiceId;
-    a.download = `tts_${langLabel}_${v}_${Date.now()}.srt`.replace(/\s+/g, "");
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
   }
 
   function handleDownload() {
@@ -304,12 +276,6 @@ export default function Tts() {
           placeholder="읽을 대본을 붙여넣으세요."
           className="input resize-y min-h-[140px] leading-relaxed"
         />
-        <div className="mt-2 px-3 py-2 rounded-xl bg-bg-tip border border-gold/30 text-[11.5px] text-ink-muted leading-relaxed">
-          💡 <b className="text-gold-tip">쇼츠 자막 자동 생성</b> — 줄바꿈·마침표·쉼표 기준으로
-          대본을 잘게 나눠서 <b>SRT 자막 파일</b>을 같이 뽑아드려요. 호흡 더 세밀히 나누고 싶으면
-          문장 중간에 <code className="px-1 rounded bg-white border border-borderc-base">/</code>를
-          넣으세요.
-        </div>
         <div className="flex flex-wrap items-center gap-2 mt-3">
           <button
             type="button"
@@ -404,18 +370,9 @@ export default function Tts() {
           <button
             type="button"
             onClick={handleDownload}
-            className="btn-sm sm:w-40 flex items-center justify-center gap-2"
+            className="btn-sm sm:w-44 flex items-center justify-center gap-2"
           >
             ⬇️ mp3 저장
-          </button>
-        )}
-        {audioUrl && srt && (
-          <button
-            type="button"
-            onClick={handleDownloadSrt}
-            className="btn-sm sm:w-40 flex items-center justify-center gap-2"
-          >
-            📄 SRT 저장
           </button>
         )}
       </div>
@@ -428,28 +385,10 @@ export default function Tts() {
 
       {audioUrl && (
         <div className="card">
-          <div className="flex items-center justify-between mb-3">
-            <div className="text-[11px] font-bold tracking-[0.18em] text-ink-soft uppercase">
-              🔊 재생
-            </div>
-            {segmentCount > 0 && (
-              <div className="text-[11px] font-bold text-gold-tip">
-                📄 자막 {segmentCount}줄 생성됨
-              </div>
-            )}
+          <div className="text-[11px] font-bold tracking-[0.18em] text-ink-soft uppercase mb-3">
+            🔊 재생
           </div>
           <audio ref={audioRef} src={audioUrl} controls className="w-full" />
-          {srt && (
-            <div className="mt-3 p-3 rounded-xl bg-bg-tip border border-gold/30 text-[11.5px] text-ink-muted leading-relaxed">
-              <div className="font-bold text-gold-tip mb-1">🎬 CapCut에 자막 넣는 법</div>
-              <ol className="list-decimal pl-5 space-y-0.5">
-                <li><b>mp3 저장</b> · <b>SRT 저장</b> 둘 다 다운로드</li>
-                <li>CapCut 타임라인에 mp3 드롭</li>
-                <li>상단 메뉴 <b>자막 → 자막 파일 가져오기</b>로 <b>.srt</b> 열기</li>
-                <li>호흡 단위로 잘게 나뉜 자막이 자동으로 붙음 ✨</li>
-              </ol>
-            </div>
-          )}
         </div>
       )}
 
