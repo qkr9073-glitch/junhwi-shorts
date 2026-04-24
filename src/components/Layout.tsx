@@ -95,7 +95,7 @@ export default function Layout() {
               end={item.to === "/"}
               className={({ isActive }) =>
                 [
-                  "shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 transition-all whitespace-nowrap",
+                  "shrink-0 flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl border-2 transition-all whitespace-nowrap",
                   isActive
                     ? "bg-gradient-to-br from-gold/15 to-amber-50 border-gold shadow-sm"
                     : "bg-white border-borderc-base",
@@ -261,7 +261,7 @@ export default function Layout() {
                     <div className="hidden sm:block text-[11.5px] font-bold text-[#3C1E1E]/70 mb-0.5 tracking-wide">
                       👋 쇼츠 크리에이터라면 필수!
                     </div>
-                    <div className="text-[13px] sm:text-lg font-extrabold text-[#3C1E1E] leading-tight pr-12 sm:pr-0">
+                    <div className="text-[13px] sm:text-lg font-extrabold text-[#3C1E1E] leading-tight pr-14 sm:pr-0 line-clamp-1 sm:line-clamp-none">
                       박준휘 쇼츠 커뮤니티 오픈채팅
                     </div>
                     <div className="text-[11px] sm:text-[12.5px] text-[#3C1E1E]/75 mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">

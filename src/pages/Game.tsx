@@ -532,13 +532,13 @@ export default function Game() {
         <b>Space</b> 또는 화면을 <b>탭/클릭</b>해서 점프. 준휘쌤 잔소리를 피하세요 ㅋㅋ
       </p>
 
-      <div className="relative inline-block bg-white rounded-2xl shadow-card p-3 max-w-full">
+      <div className="relative block w-full bg-white rounded-2xl shadow-card p-2 sm:p-3 overflow-hidden">
         <canvas
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          className="block rounded-xl cursor-pointer"
-          style={{ maxWidth: "100%", height: "auto" }}
+          className="block rounded-xl cursor-pointer w-full h-auto"
+          style={{ maxWidth: "100%" }}
         />
         {audioAvailable && (
           <button

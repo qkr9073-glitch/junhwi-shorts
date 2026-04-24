@@ -193,7 +193,7 @@ export default function Tts() {
                 type="button"
                 onClick={() => changeLang(k)}
                 className={[
-                  "flex items-center gap-2 px-3 py-3 rounded-2xl border-2 transition-all",
+                  "flex items-center gap-2 px-3 py-3 min-h-[48px] rounded-2xl border-2 transition-all",
                   active
                     ? "bg-gradient-to-br from-gold/15 to-amber-50 border-gold shadow-[0_4px_16px_rgba(200,134,10,0.18)]"
                     : "bg-white border-borderc-base hover:border-gold/40",

@@ -174,7 +174,7 @@ function EbooksContent() {
       </div>
 
       {/* 세로형 5권 — 상단 그리드 */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-10 sm:mb-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-6 lg:gap-8 mb-10 sm:mb-12">
         {PORTRAIT_BOOKS.map((b, i) => (
           <a
             key={b.href}

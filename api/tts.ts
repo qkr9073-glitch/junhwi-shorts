@@ -1,6 +1,48 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 
+// 간단한 IP당 레이트리밋 — 분당 10회
+// 서버리스 인스턴스별로 메모리 유지 (콜드 스타트 시 리셋)
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+type Bucket = { count: number; resetAt: number };
+const buckets = new Map<string, Bucket>();
+
+function getClientIp(req: VercelRequest): string {
+  const fwd = req.headers["x-forwarded-for"];
+  if (typeof fwd === "string" && fwd.length > 0) {
+    return fwd.split(",")[0].trim();
+  }
+  if (Array.isArray(fwd) && fwd.length > 0) {
+    return fwd[0];
+  }
+  const real = req.headers["x-real-ip"];
+  if (typeof real === "string" && real.length > 0) return real;
+  return req.socket?.remoteAddress ?? "unknown";
+}
+
+function checkRateLimit(ip: string): { ok: boolean; retryAfter: number } {
+  const now = Date.now();
+  const b = buckets.get(ip);
+  if (!b || now >= b.resetAt) {
+    buckets.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { ok: true, retryAfter: 0 };
+  }
+  if (b.count >= RATE_LIMIT_MAX) {
+    return { ok: false, retryAfter: Math.ceil((b.resetAt - now) / 1000) };
+  }
+  b.count += 1;
+  return { ok: true, retryAfter: 0 };
+}
+
+// 메모리 누수 방지 — 가끔 만료된 버킷 청소
+function sweepBuckets() {
+  const now = Date.now();
+  for (const [k, v] of buckets) {
+    if (now >= v.resetAt) buckets.delete(k);
+  }
+}
+
 const ALLOWED_VOICES = new Set([
   // 한국어
   "ko-KR-SunHiNeural",
@@ -39,9 +81,29 @@ function clampPitch(v: unknown): string {
   return `${c >= 0 ? "+" : ""}${c}Hz`;
 }
 
+function escapeSSML(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // 레이트리밋 체크
+  if (Math.random() < 0.1) sweepBuckets();
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(ip);
+  if (!rl.ok) {
+    res.setHeader("Retry-After", String(rl.retryAfter));
+    return res
+      .status(429)
+      .json({ error: `요청이 너무 많습니다. ${rl.retryAfter}초 후 다시 시도해주세요.` });
   }
 
   const { text, voice, rate, pitch } = (req.body ?? {}) as {
@@ -69,7 +131,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       voice,
       OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
     );
-    const { audioStream } = tts.toStream(text, {
+    const { audioStream } = tts.toStream(escapeSSML(text), {
       rate: clampRate(rate),
       pitch: clampPitch(pitch),
     });
