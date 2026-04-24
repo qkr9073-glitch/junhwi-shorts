@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+import { Communicate } from "edge-tts-universal";
 
 // 간단한 IP당 레이트리밋 — 분당 10회
 // 서버리스 인스턴스별로 메모리 유지 (콜드 스타트 시 리셋)
@@ -35,7 +35,6 @@ function checkRateLimit(ip: string): { ok: boolean; retryAfter: number } {
   return { ok: true, retryAfter: 0 };
 }
 
-// 메모리 누수 방지 — 가끔 만료된 버킷 청소
 function sweepBuckets() {
   const now = Date.now();
   for (const [k, v] of buckets) {
@@ -81,20 +80,11 @@ function clampPitch(v: unknown): string {
   return `${c >= 0 ? "+" : ""}${c}Hz`;
 }
 
-function escapeSSML(s: string): string {
-  // 오직 SSML 주입만 차단 — 태그처럼 보이는 것만 비활성화
-  // `&`와 `'`는 Edge TTS가 그대로 받아야 정상 음성 생성됨
-  return s.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-const STREAM_TIMEOUT_MS = 25_000;
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // 레이트리밋 체크
   if (Math.random() < 0.1) sweepBuckets();
   const ip = getClientIp(req);
   const rl = checkRateLimit(ip);
@@ -124,49 +114,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "invalid voice" });
   }
 
-  let tts: MsEdgeTTS | null = null;
   try {
-    tts = new MsEdgeTTS();
-    await tts.setMetadata(
+    const communicate = new Communicate(text, {
       voice,
-      OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
-    );
-    const { audioStream } = tts.toStream(escapeSSML(text), {
       rate: clampRate(rate),
       pitch: clampPitch(pitch),
+      connectionTimeout: 20_000,
     });
 
     const chunks: Buffer[] = [];
-    let streamError: Error | null = null;
-    await new Promise<void>((resolve) => {
-      const to = setTimeout(() => {
-        streamError = new Error(
-          `Edge TTS 응답 대기 시간 초과 (${STREAM_TIMEOUT_MS / 1000}초)`
-        );
-        try {
-          audioStream.destroy();
-        } catch {
-          // ignore
-        }
-        resolve();
-      }, STREAM_TIMEOUT_MS);
-
-      audioStream.on("data", (c: Buffer) => chunks.push(Buffer.from(c)));
-      audioStream.on("end", () => {
-        clearTimeout(to);
-        resolve();
-      });
-      audioStream.on("error", (e: Error) => {
-        clearTimeout(to);
-        streamError = e;
-        resolve();
-      });
-    });
-
-    if (streamError) {
-      return res
-        .status(502)
-        .json({ error: `Edge TTS 실패: ${(streamError as Error).message}` });
+    for await (const chunk of communicate.stream()) {
+      if (chunk.type === "audio" && chunk.data) {
+        chunks.push(Buffer.from(chunk.data));
+      }
     }
 
     const buf = Buffer.concat(chunks);
@@ -187,12 +147,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).send(buf);
   } catch (err) {
     const msg = err instanceof Error ? err.message : "tts failed";
-    return res.status(500).json({ error: msg });
-  } finally {
-    try {
-      tts?.close();
-    } catch {
-      // ignore
-    }
+    return res.status(502).json({ error: `Edge TTS 실패: ${msg}` });
   }
 }
