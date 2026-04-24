@@ -27,6 +27,13 @@ const NAV: NavItem[] = [
     badge: "AI",
   },
   {
+    to: "/tts",
+    emoji: "🎙️",
+    label: "AI 성우 (TTS)",
+    desc: "한·일·영·중 4개국 내레이션",
+    badge: "AI",
+  },
+  {
     to: "/game",
     emoji: "🦘",
     label: "캥거루 점프",
