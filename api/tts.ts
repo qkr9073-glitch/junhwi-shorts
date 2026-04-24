@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Communicate } from "edge-tts-universal";
 
-// 레이트리밋 — IP당 분당 10회 (서버리스 인스턴스별 메모리, 콜드 스타트 시 리셋)
+// 레이트리밋 — IP당 분당 10회
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 type Bucket = { count: number; resetAt: number };
@@ -58,14 +58,8 @@ const ALLOWED_VOICES = new Set([
 ]);
 
 const MAX_CHARS = 2000;
-const MAX_SEGMENTS = 30;
-const CONCURRENCY = 2;
-const SEGMENT_RETRY = 5;
-const RETRY_BACKOFF_MS = [500, 1200, 2500, 4500]; // attempt 1-4 실패 후 대기
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
-}
+const BYTES_PER_SEC = 6000; // 24kHz 48kbps mono mp3
+const HUNDRED_NS_PER_MS = 10_000;
 
 function clampRate(v: unknown): string {
   const n = typeof v === "number" ? v : parseInt(String(v ?? 0), 10);
@@ -81,11 +75,7 @@ function clampPitch(v: unknown): string {
   return `${c >= 0 ? "+" : ""}${c}Hz`;
 }
 
-// 자막용 분절 규칙:
-// 1) 줄바꿈 → 무조건 끊기
-// 2) `/` → 사용자 수동 호흡 마커
-// 3) `.!?。！？` 등 문장 종결 → 끊기
-// 4) `,、，` 쉼표 → 끊기 (단, 너무 짧은 조각은 뒤에 합치기)
+// 자막 라인 분절: 줄바꿈 · `/` · 문장종결 · 쉼표에서 끊음
 function splitScript(raw: string): string[] {
   const HARD_BREAK = /[\n/]/;
   const SENTENCE_END = /[.!?。！？]/;
@@ -114,7 +104,7 @@ function splitScript(raw: string): string[] {
   }
   flush();
 
-  // 너무 짧은 조각 (< 4자)은 앞 조각에 합쳐서 자막이 잘리지 않게
+  // 너무 짧은 조각 (< 4자) 앞에 합치기
   const MIN_LEN = 4;
   const merged: string[] = [];
   for (const s of out) {
@@ -127,84 +117,77 @@ function splitScript(raw: string): string[] {
   return merged;
 }
 
-async function synthesizeOne(
-  text: string,
-  voice: string,
-  rate: string,
-  pitch: string
-): Promise<Buffer> {
-  const communicate = new Communicate(text, {
-    voice,
-    rate,
-    pitch,
-    connectionTimeout: 12_000,
-  });
-  const chunks: Buffer[] = [];
-  for await (const chunk of communicate.stream()) {
-    if (chunk.type === "audio" && chunk.data) {
-      chunks.push(Buffer.from(chunk.data));
-    }
-  }
-  return Buffer.concat(chunks);
+// 정렬용 정규화: 공백·구두점 제거
+const PUNCT_WHITESPACE_RE =
+  /[\s、。，．,./!?！？()（）「」『』【】〈〉《》—–…·「」『』\-_"'`"“”'‘’　]/g;
+function normalizeForAlign(s: string): string {
+  return s.replace(PUNCT_WHITESPACE_RE, "");
 }
 
-// 개별 구간 실패 시 재시도 (MS 쪽 간헐적 빈 응답 대응)
-async function synthesizeWithRetry(
-  text: string,
-  voice: string,
-  rate: string,
-  pitch: string
-): Promise<Buffer> {
-  let lastErr: unknown = null;
-  for (let attempt = 1; attempt <= SEGMENT_RETRY; attempt++) {
-    try {
-      const buf = await synthesizeOne(text, voice, rate, pitch);
-      if (buf.length > 0) return buf;
-      lastErr = new Error("empty audio");
-    } catch (e) {
-      lastErr = e;
-    }
-    if (attempt < SEGMENT_RETRY) {
-      await sleep(RETRY_BACKOFF_MS[attempt - 1] ?? 5000);
-    }
-  }
-  throw lastErr instanceof Error ? lastErr : new Error("synthesis failed");
-}
+type SrtEntry = { text: string; startMs: number; endMs: number };
+type WordEvent = { offset: number; duration: number; text: string };
 
-type SegmentError = { index: number; segment: string; error: string };
-
-async function synthesizeAll(
+// WordBoundary 이벤트를 사용해 각 구간의 시작/끝 시간을 계산
+// WordBoundary가 부족하면 글자 수 비례로 fallback
+function alignSegments(
   segments: string[],
-  voice: string,
-  rate: string,
-  pitch: string
-): Promise<{ buffers: (Buffer | null)[]; errors: SegmentError[] }> {
-  const buffers: (Buffer | null)[] = new Array(segments.length).fill(null);
-  const errors: SegmentError[] = [];
+  words: WordEvent[],
+  totalDurationMs: number
+): SrtEntry[] {
+  const segNorms = segments.map(normalizeForAlign);
+  const totalChars = segNorms.reduce((a, b) => a + b.length, 0) || 1;
 
-  for (let i = 0; i < segments.length; i += CONCURRENCY) {
-    const batch = segments.slice(i, i + CONCURRENCY);
-    const settled = await Promise.allSettled(
-      batch.map((seg) => synthesizeWithRetry(seg, voice, rate, pitch))
-    );
-    for (let j = 0; j < settled.length; j++) {
-      const idx = i + j;
-      const r = settled[j];
-      if (r.status === "fulfilled") {
-        buffers[idx] = r.value;
-      } else {
-        const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
-        errors.push({ index: idx, segment: segments[idx], error: msg });
-      }
+  // WordBoundary가 구간 수보다 적으면 비례 분배
+  if (words.length < segments.length) {
+    const entries: SrtEntry[] = [];
+    let startMs = 0;
+    for (let i = 0; i < segments.length; i++) {
+      const ratio = segNorms[i].length / totalChars;
+      const dur = ratio * totalDurationMs;
+      entries.push({ text: segments[i], startMs, endMs: startMs + dur });
+      startMs += dur;
     }
-    // 배치 사이 MS 쪽 throttle 방지용 짧은 쉼
-    if (i + CONCURRENCY < segments.length) await sleep(250);
+    return entries;
   }
-  return { buffers, errors };
-}
 
-// 24kHz 48kbps mono mp3 = 6000 bytes/sec → 바이트 수로 정확한 재생 시간 계산
-const BYTES_PER_SEC = 6000;
+  // 누적 목표 글자 수
+  const cumulativeTargets: number[] = [];
+  let cum = 0;
+  for (const len of segNorms.map((s) => s.length)) {
+    cum += len;
+    cumulativeTargets.push(cum);
+  }
+
+  const entries: SrtEntry[] = [];
+  let wordIdx = 0;
+  let charCount = 0;
+  let prevEndMs = 0;
+
+  for (let i = 0; i < segments.length; i++) {
+    let endMs = prevEndMs;
+    while (wordIdx < words.length && charCount < cumulativeTargets[i]) {
+      const w = words[wordIdx];
+      charCount += normalizeForAlign(w.text).length;
+      endMs = (w.offset + w.duration) / HUNDRED_NS_PER_MS;
+      wordIdx++;
+    }
+
+    // 마지막 구간은 전체 길이까지 확장
+    if (i === segments.length - 1) {
+      endMs = totalDurationMs;
+    }
+
+    // 비정상적으로 짧으면 최소 300ms 보장
+    if (endMs <= prevEndMs) {
+      endMs = prevEndMs + 300;
+    }
+
+    entries.push({ text: segments[i], startMs: prevEndMs, endMs });
+    prevEndMs = endMs;
+  }
+
+  return entries;
+}
 
 function fmtSrtTime(ms: number): string {
   const clamped = Math.max(0, Math.floor(ms));
@@ -223,14 +206,10 @@ function fmtSrtTime(ms: number): string {
   );
 }
 
-function buildSrt(
-  entries: { text: string; durationMs: number }[]
-): string {
+function buildSrt(entries: SrtEntry[]): string {
   let srt = "";
-  let startMs = 0;
   for (let i = 0; i < entries.length; i++) {
-    const { text, durationMs } = entries[i];
-    const endMs = startMs + durationMs;
+    const { text, startMs, endMs } = entries[i];
     srt +=
       String(i + 1) +
       "\n" +
@@ -240,9 +219,63 @@ function buildSrt(
       "\n" +
       text +
       "\n\n";
-    startMs = endMs;
   }
   return srt;
+}
+
+async function synthesize(
+  text: string,
+  voice: string,
+  rate: string,
+  pitch: string
+): Promise<{ audio: Buffer; words: WordEvent[] }> {
+  const communicate = new Communicate(text, {
+    voice,
+    rate,
+    pitch,
+    connectionTimeout: 20_000,
+  });
+  const audioChunks: Buffer[] = [];
+  const words: WordEvent[] = [];
+
+  for await (const chunk of communicate.stream()) {
+    if (chunk.type === "audio" && chunk.data) {
+      audioChunks.push(Buffer.from(chunk.data));
+    } else if (
+      chunk.type === "WordBoundary" &&
+      typeof chunk.offset === "number" &&
+      typeof chunk.duration === "number" &&
+      typeof chunk.text === "string" &&
+      chunk.text.length > 0
+    ) {
+      words.push({
+        offset: chunk.offset,
+        duration: chunk.duration,
+        text: chunk.text,
+      });
+    }
+  }
+
+  return { audio: Buffer.concat(audioChunks), words };
+}
+
+// 한 번 실패하면 한 번 더 시도
+async function synthesizeWithRetry(
+  text: string,
+  voice: string,
+  rate: string,
+  pitch: string
+): Promise<{ audio: Buffer; words: WordEvent[] }> {
+  try {
+    const r = await synthesize(text, voice, rate, pitch);
+    if (r.audio.length > 0) return r;
+    throw new Error("empty audio");
+  } catch (_e) {
+    await new Promise((r) => setTimeout(r, 800));
+    const r = await synthesize(text, voice, rate, pitch);
+    if (r.audio.length === 0) throw new Error("Edge TTS returned empty audio");
+    return r;
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -255,9 +288,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const rl = checkRateLimit(ip);
   if (!rl.ok) {
     res.setHeader("Retry-After", String(rl.retryAfter));
-    return res
-      .status(429)
-      .json({ error: `요청이 너무 많습니다. ${rl.retryAfter}초 후 다시 시도해주세요.` });
+    return res.status(429).json({
+      error: `요청이 너무 많습니다. ${rl.retryAfter}초 후 다시 시도해주세요.`,
+    });
   }
 
   const { text, voice, rate, pitch } = (req.body ?? {}) as {
@@ -279,64 +312,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "invalid voice" });
   }
 
+  // SSML에 안전하도록 / 와 과다 공백을 정규화해서 TTS에 전달
+  // (줄바꿈은 자연스러운 호흡으로 유지)
+  const ttsText = text
+    .replace(/\//g, " ")
+    .replace(/[ \t]+/g, " ")
+    .trim();
+
   const segments = splitScript(text);
   if (segments.length === 0) {
     return res.status(400).json({ error: "읽을 문장이 없습니다." });
   }
-  if (segments.length > MAX_SEGMENTS) {
-    return res.status(400).json({
-      error: `대본이 너무 많이 분절됩니다 (${segments.length}개). 최대 ${MAX_SEGMENTS}개까지. 짧은 문장을 합치거나 대본을 줄여주세요.`,
-    });
-  }
-
-  const rateStr = clampRate(rate);
-  const pitchStr = clampPitch(pitch);
 
   try {
-    const { buffers, errors } = await synthesizeAll(
-      segments,
+    const { audio, words } = await synthesizeWithRetry(
+      ttsText,
       voice,
-      rateStr,
-      pitchStr
+      clampRate(rate),
+      clampPitch(pitch)
     );
 
-    if (errors.length > 0) {
-      const first = errors[0];
-      const preview =
-        first.segment.length > 30
-          ? first.segment.slice(0, 30) + "…"
-          : first.segment;
+    if (audio.length === 0) {
       return res.status(502).json({
-        error:
-          `구간 ${errors.length}/${segments.length}개 생성 실패. ` +
-          `예: "${preview}" (${first.error}). ` +
-          `잠시 후 다시 시도하거나 대본을 조금 짧게 해주세요.`,
-        failedCount: errors.length,
-        totalCount: segments.length,
+        error: "Edge TTS에서 빈 응답이 왔습니다. 잠시 후 다시 시도해주세요.",
       });
     }
 
-    const entries: { text: string; durationMs: number }[] = [];
-    const validBuffers: Buffer[] = [];
-    for (let i = 0; i < segments.length; i++) {
-      const buf = buffers[i];
-      if (!buf || buf.length === 0) {
-        return res.status(502).json({
-          error: `구간 ${i + 1} 합성 실패 (빈 오디오). 다시 시도해주세요.`,
-        });
-      }
-      validBuffers.push(buf);
-      entries.push({
-        text: segments[i],
-        durationMs: (buf.length / BYTES_PER_SEC) * 1000,
-      });
-    }
-
-    const combined = Buffer.concat(validBuffers);
+    const totalDurationMs = (audio.length / BYTES_PER_SEC) * 1000;
+    const entries = alignSegments(segments, words, totalDurationMs);
     const srt = buildSrt(entries);
 
     return res.status(200).json({
-      audio: combined.toString("base64"),
+      audio: audio.toString("base64"),
       srt,
       segmentCount: segments.length,
       mime: "audio/mpeg",
