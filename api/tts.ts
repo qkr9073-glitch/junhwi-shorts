@@ -58,9 +58,10 @@ const ALLOWED_VOICES = new Set([
 ]);
 
 const MAX_CHARS = 2000;
-const MAX_SEGMENTS = 40;
-const CONCURRENCY = 3;
-const SEGMENT_RETRY = 3;
+const MAX_SEGMENTS = 30;
+const CONCURRENCY = 2;
+const SEGMENT_RETRY = 5;
+const RETRY_BACKOFF_MS = [500, 1200, 2500, 4500]; // attempt 1-4 실패 후 대기
 
 function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -164,32 +165,42 @@ async function synthesizeWithRetry(
       lastErr = e;
     }
     if (attempt < SEGMENT_RETRY) {
-      // 지수 백오프: 400ms, 1200ms
-      await sleep(400 * Math.pow(3, attempt - 1));
+      await sleep(RETRY_BACKOFF_MS[attempt - 1] ?? 5000);
     }
   }
   throw lastErr instanceof Error ? lastErr : new Error("synthesis failed");
 }
+
+type SegmentError = { index: number; segment: string; error: string };
 
 async function synthesizeAll(
   segments: string[],
   voice: string,
   rate: string,
   pitch: string
-): Promise<Buffer[]> {
-  const results: Buffer[] = new Array(segments.length);
+): Promise<{ buffers: (Buffer | null)[]; errors: SegmentError[] }> {
+  const buffers: (Buffer | null)[] = new Array(segments.length).fill(null);
+  const errors: SegmentError[] = [];
+
   for (let i = 0; i < segments.length; i += CONCURRENCY) {
     const batch = segments.slice(i, i + CONCURRENCY);
-    const batchRes = await Promise.all(
+    const settled = await Promise.allSettled(
       batch.map((seg) => synthesizeWithRetry(seg, voice, rate, pitch))
     );
-    for (let j = 0; j < batchRes.length; j++) {
-      results[i + j] = batchRes[j];
+    for (let j = 0; j < settled.length; j++) {
+      const idx = i + j;
+      const r = settled[j];
+      if (r.status === "fulfilled") {
+        buffers[idx] = r.value;
+      } else {
+        const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
+        errors.push({ index: idx, segment: segments[idx], error: msg });
+      }
     }
     // 배치 사이 MS 쪽 throttle 방지용 짧은 쉼
-    if (i + CONCURRENCY < segments.length) await sleep(150);
+    if (i + CONCURRENCY < segments.length) await sleep(250);
   }
-  return results;
+  return { buffers, errors };
 }
 
 // 24kHz 48kbps mono mp3 = 6000 bytes/sec → 바이트 수로 정확한 재생 시간 계산
@@ -282,23 +293,46 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const pitchStr = clampPitch(pitch);
 
   try {
-    const audioBuffers = await synthesizeAll(segments, voice, rateStr, pitchStr);
+    const { buffers, errors } = await synthesizeAll(
+      segments,
+      voice,
+      rateStr,
+      pitchStr
+    );
+
+    if (errors.length > 0) {
+      const first = errors[0];
+      const preview =
+        first.segment.length > 30
+          ? first.segment.slice(0, 30) + "…"
+          : first.segment;
+      return res.status(502).json({
+        error:
+          `구간 ${errors.length}/${segments.length}개 생성 실패. ` +
+          `예: "${preview}" (${first.error}). ` +
+          `잠시 후 다시 시도하거나 대본을 조금 짧게 해주세요.`,
+        failedCount: errors.length,
+        totalCount: segments.length,
+      });
+    }
 
     const entries: { text: string; durationMs: number }[] = [];
+    const validBuffers: Buffer[] = [];
     for (let i = 0; i < segments.length; i++) {
-      const buf = audioBuffers[i];
+      const buf = buffers[i];
       if (!buf || buf.length === 0) {
         return res.status(502).json({
           error: `구간 ${i + 1} 합성 실패 (빈 오디오). 다시 시도해주세요.`,
         });
       }
+      validBuffers.push(buf);
       entries.push({
         text: segments[i],
         durationMs: (buf.length / BYTES_PER_SEC) * 1000,
       });
     }
 
-    const combined = Buffer.concat(audioBuffers);
+    const combined = Buffer.concat(validBuffers);
     const srt = buildSrt(entries);
 
     return res.status(200).json({
