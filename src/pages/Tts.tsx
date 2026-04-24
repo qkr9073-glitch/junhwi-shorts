@@ -151,6 +151,33 @@ export default function Tts() {
         </p>
       </div>
 
+      {/* 실습 안내 배너 */}
+      <div className="relative mb-5 rounded-3xl overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-amber-50 via-white to-amber-50 shadow-[0_8px_24px_rgba(200,134,10,0.12)]">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-gold to-amber-600 text-white flex items-center justify-center text-xl sm:text-2xl shadow-md">
+              🎓
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gold text-white text-[10px] sm:text-[11px] font-extrabold tracking-wider mb-1.5">
+                ✨ 평생 무료 실습
+              </div>
+              <p className="text-[13px] sm:text-[14px] text-ink leading-relaxed font-semibold">
+                <b className="text-gold-tip">전자책</b>과{" "}
+                <b className="text-gold-tip">쇼츠 설계도</b>를 바탕으로,
+                여러분들이 AI 성우 대본 작성을{" "}
+                <b className="text-gold-tip">"평생 무료"</b>로 실습해 볼 수 있습니다.
+              </p>
+              <p className="text-[11.5px] sm:text-[12px] text-ink-muted mt-1.5 leading-relaxed">
+                🔒 업그레이드 버전 <b>대본 작성 봇</b>과 <b>TTS 작성 가이드</b>는{" "}
+                유료 수강생 전용입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 언어 선택 */}
       <div className="card mb-4">
         <div className="text-[11px] font-bold tracking-[0.18em] text-ink-soft uppercase mb-3">
@@ -369,6 +396,7 @@ export default function Tts() {
       <div className="mt-6 p-4 rounded-2xl bg-bg-tip border border-gold/30 text-[12.5px] text-ink-muted leading-relaxed">
         <div className="font-bold text-gold-tip mb-1">💡 사용 팁</div>
         <ul className="list-disc pl-5 space-y-0.5">
+          <li><b className="text-gold-tip">쇼츠 설계도</b>에서 만든 대본을 여기서 공짜로 만들어 볼 수 있습니다! 🎉</li>
           <li>마이크로소프트 Edge 뉴럴 보이스 기반, 완전 무료이며 회원가입·API키 필요 없습니다.</li>
           <li>한 번에 최대 {MAX_CHARS.toLocaleString()}자까지 변환 가능. 긴 대본은 나눠서 생성하세요.</li>
           <li>쇼츠에 쓸 때는 <b>속도 +10~+20%</b> 정도가 자연스러워요.</li>
