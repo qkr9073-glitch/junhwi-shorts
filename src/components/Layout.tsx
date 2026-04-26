@@ -14,7 +14,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   {
-    to: "/",
+    to: "/roadmap",
     emoji: "🎯",
     label: "새로부업 로드맵",
     desc: "5가지 질문으로 내 맞춤 전략 찾기",
