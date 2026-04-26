@@ -22,12 +22,11 @@ export default function Landing() {
 
       {/* 콘텐츠 */}
       <div className="relative z-10 w-full max-w-2xl flex flex-col items-center text-center">
-        {/* 로고 — mix-blend-mode: screen 으로 검정 배경 자동 제거 */}
+        {/* 로고 — 누끼 처리된 PNG 사용 */}
         <img
           src="/logo-neonver2.png"
           alt="박준휘 쇼츠 도구"
-          className="w-44 sm:w-56 h-auto animate-float-neon select-none"
-          style={{ mixBlendMode: "screen" }}
+          className="w-[22rem] sm:w-[34rem] max-w-[92vw] h-auto animate-float-neon select-none"
           draggable={false}
         />
 

@@ -41,8 +41,7 @@ export default function Roadmap() {
           <img
             src="/logo-neon.png"
             alt="핸드인캥거루"
-            className="w-36 sm:w-48 h-auto animate-float-neon select-none"
-            style={{ mixBlendMode: "screen" }}
+            className="w-72 sm:w-[24rem] max-w-[88vw] h-auto animate-float-neon select-none"
             draggable={false}
           />
           <div
