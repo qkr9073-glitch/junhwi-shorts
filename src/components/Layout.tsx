@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-const CAFE_URL = "https://cafe.naver.com/kangarooshorts";
+const CAFE_URL = "https://cafe.naver.com/f-e/cafes/31561294/menus/14?viewType=L";
 const YT_URL = "https://www.youtube.com/@준휘야쇼츠하자";
 const KAKAO_URL = "https://open.kakao.com/o/gH4HL25h";
 
@@ -240,8 +240,9 @@ export default function Layout() {
           className="pointer-events-none select-none fixed bottom-0 right-0 w-[40vw] max-w-[360px] opacity-[0.04] z-0"
         />
         <div className="relative z-10">
-          {/* 모든 페이지 공통 상단 HOT 배너 */}
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8">
+          {/* 모든 페이지 공통 상단 HOT 배너 — 오픈채팅 + 카페 */}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 space-y-3 sm:space-y-4">
+            {/* 오픈채팅 카드 (카카오 노랑) */}
             <a
               href={KAKAO_URL}
               target="_blank"
@@ -270,6 +271,42 @@ export default function Layout() {
                   </div>
                   <div className="shrink-0">
                     <div className="px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#3C1E1E] text-[#FEE500] text-[11px] sm:text-sm font-extrabold whitespace-nowrap group-hover:bg-black transition shadow-md">
+                      입장 →
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            {/* 카페 카드 (네이버 녹색) */}
+            <a
+              href={CAFE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="relative block group rounded-2xl sm:rounded-3xl overflow-hidden"
+            >
+              <div className="absolute -inset-1 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-emerald-300 via-green-400 to-emerald-300 blur-lg opacity-50 sm:opacity-60 group-hover:opacity-90 animate-pulse" />
+              <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#03C75A] via-[#04D767] to-[#03C75A] p-3 sm:p-5 shadow-[0_8px_24px_rgba(3,199,90,0.4)] sm:shadow-[0_12px_40px_rgba(3,199,90,0.5)] ring-2 ring-emerald-400 group-hover:scale-[1.005] transition-transform">
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-red-500 text-white text-[9px] sm:text-[10px] font-bold tracking-wider animate-bounce shadow-md">
+                  🔥 HOT
+                </div>
+                <div className="flex items-center gap-2.5 sm:gap-4">
+                  <div className="shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white flex items-center justify-center text-xl sm:text-3xl shadow-inner">
+                    📗
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="hidden sm:block text-[11.5px] font-bold text-white/85 mb-0.5 tracking-wide">
+                      🌱 무료 자료 가득!
+                    </div>
+                    <div className="text-[13px] sm:text-lg font-extrabold text-white leading-tight pr-14 sm:pr-0 line-clamp-1 sm:line-clamp-none">
+                      꾸준휘 쇼츠 수익화 카페
+                    </div>
+                    <div className="text-[11px] sm:text-[12.5px] text-white/85 mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">
+                      무료 자료 · 후기 공유 · 노하우 정리
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    <div className="px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-white text-[#03C75A] text-[11px] sm:text-sm font-extrabold whitespace-nowrap group-hover:bg-emerald-50 transition shadow-md">
                       입장 →
                     </div>
                   </div>
