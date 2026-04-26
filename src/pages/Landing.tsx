@@ -53,13 +53,13 @@ export default function Landing() {
 
         {/* 설명 카피 */}
         <p
-          className="mt-5 text-[13px] sm:text-[14.5px] text-white/70 leading-relaxed max-w-md animate-fade-up"
+          className="mt-5 text-[13px] sm:text-[14.5px] text-white/70 leading-relaxed max-w-md animate-fade-up break-keep"
           style={{ animationDelay: "0.35s" }}
         >
           이 프로그램은 <b className="text-white">박준휘 강사의 수강생 전용</b>입니다.
           무료로 아래 기능을 <b className="text-amber-200">무제한 사용</b>할 수 있으며,
           상향 기능은 정규 수강생만 이용 가능하지만{" "}
-          <b className="text-white">현재 탑재된 기능만으로 충분히 실습</b>이 가능합니다.
+          <b className="text-white">현재 탑재된 기능만으로 충분히 실습이 가능합니다</b>.
         </p>
 
         {/* 도구 6개 미니 그리드 */}
