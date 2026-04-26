@@ -30,36 +30,63 @@ export default function Roadmap() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       {/* 히어로 */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1f2540] via-[#2a2f55] to-[#1f2540] p-6 sm:p-10 shadow-[0_16px_48px_rgba(30,41,90,0.25)] mb-6">
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-gold/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-10 w-56 h-56 bg-amber-400/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/20 text-gold border border-gold/40 text-[11px] sm:text-[12px] font-extrabold tracking-wider mb-4">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#070b22] via-[#1a2350] to-[#070b22] animate-gradient-shift p-6 sm:p-10 shadow-[0_20px_56px_rgba(10,15,40,0.45)] mb-6">
+        <div className="absolute -top-16 -right-12 w-52 h-52 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none animate-blob-1" />
+        <div className="absolute -bottom-20 -left-12 w-60 h-60 bg-amber-300/25 rounded-full blur-3xl pointer-events-none animate-blob-2" />
+        <div
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-44 h-44 bg-pink-300/15 rounded-full blur-3xl pointer-events-none animate-blob-1"
+          style={{ animationDelay: "5s" }}
+        />
+        <div className="relative flex flex-col items-center text-center">
+          <img
+            src="/logo-neon.png"
+            alt="핸드인캥거루"
+            className="w-36 sm:w-48 h-auto animate-float-neon select-none"
+            draggable={false}
+          />
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-300/15 text-cyan-200 border border-cyan-300/40 text-[11px] sm:text-[12px] font-extrabold tracking-wider mt-5 mb-4 animate-fade-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             🎯 START HERE · 1단계
           </div>
-          <h1 className="text-[26px] sm:text-4xl font-extrabold text-white leading-[1.2]">
+          <h1
+            className="text-[26px] sm:text-4xl font-extrabold text-white leading-[1.2] animate-fade-up"
+            style={{ animationDelay: "0.2s" }}
+          >
             나에게 딱 맞는
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e8a928] via-[#ffd900] to-[#e8a928]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-amber-200 to-pink-300 animate-shimmer-text">
               쇼츠 부업 로드맵
             </span>
           </h1>
-          <p className="text-[13.5px] sm:text-[15.5px] text-white/80 mt-3 leading-relaxed max-w-xl">
+          <p
+            className="text-[13.5px] sm:text-[15.5px] text-white/80 mt-3 leading-relaxed max-w-xl animate-fade-up"
+            style={{ animationDelay: "0.35s" }}
+          >
             AI 전략 상담 봇이{" "}
-            <b className="text-[#ffd900]">딱 5가지 질문</b>으로 당신에게 가장
+            <b className="text-amber-200">딱 5가지 질문</b>으로 당신에게 가장
             어울리는 쇼츠 부업 방향을 알려줍니다. 무료, 회원가입 X, 1분 안에
             결과.
           </p>
-          <a
-            href={GPT_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 mt-5 sm:mt-6 px-5 sm:px-7 py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-[#e8a928] to-[#ffd900] hover:from-[#ffd900] hover:to-[#e8a928] text-[#1f2540] font-extrabold text-[14px] sm:text-[16px] shadow-[0_8px_24px_rgba(232,169,40,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]"
+          <div
+            className="animate-fade-up inline-block mt-5 sm:mt-6"
+            style={{ animationDelay: "0.5s" }}
           >
-            🚀 지금 바로 상담 시작하기
-            <span className="text-lg">→</span>
-          </a>
-          <div className="text-[11px] sm:text-[12px] text-white/60 mt-2">
+            <a
+              href={GPT_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-amber-300 to-yellow-200 hover:from-yellow-200 hover:to-amber-300 text-[#1f2540] font-extrabold text-[14px] sm:text-[16px] transition-all hover:scale-[1.04] active:scale-[0.96] animate-cta-breathe"
+            >
+              🚀 지금 바로 상담 시작하기
+              <span className="text-lg">→</span>
+            </a>
+          </div>
+          <div
+            className="text-[11px] sm:text-[12px] text-white/60 mt-2 animate-fade-up"
+            style={{ animationDelay: "0.65s" }}
+          >
             ✨ 챗GPT 무료 계정으로 바로 사용 가능
           </div>
         </div>
