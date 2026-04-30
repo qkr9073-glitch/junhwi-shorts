@@ -76,7 +76,7 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #c8860a; outline-
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -96,8 +96,12 @@ input:focus, select:focus, textarea:focus { outline: 2px solid #c8860a; outline-
   background-size: 200% auto;
   animation: shimmer-text 5s linear infinite;
 }
+/* Failsafe: visible by default. If the animation never starts (iOS Safari
+   throttles backgrounded tabs, prefers-reduced-motion, broken keyframes,
+   etc.), content stays readable instead of getting stuck at opacity 0. */
 .animate-fade-up {
-  animation: fade-up 0.8s ease-out backwards;
+  opacity: 1;
+  animation: fade-up 0.6s ease-out;
 }
 .animate-cta-breathe { animation: cta-breathe 2.6s ease-in-out infinite; }
 
