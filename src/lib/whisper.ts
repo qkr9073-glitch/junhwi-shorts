@@ -6,6 +6,8 @@ import {
 
 env.allowLocalModels = false;
 env.useBrowserCache = true;
+env.backends.onnx.wasm!.wasmPaths =
+  "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.26.0-dev.20260416-b7804b056c/dist/";
 
 export type WhisperModel = "tiny" | "base" | "small" | "medium";
 
