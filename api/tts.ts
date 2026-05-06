@@ -1,12 +1,16 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Communicate } from "edge-tts-universal";
 
-// 간단한 IP당 레이트리밋 — 분당 10회
-// 서버리스 인스턴스별로 메모리 유지 (콜드 스타트 시 리셋)
-const RATE_LIMIT_MAX = 10;
-const RATE_LIMIT_WINDOW_MS = 60_000;
+// IP당 다단계 레이트리밋 — 분당 5 / 시간당 30 / 하루 100
+// 서버리스 인스턴스별 메모리 (콜드 스타트 시 리셋되어 정확하진 않으나 남용 차단 효과)
+const LIMITS = [
+  { name: "분당", max: 5, windowMs: 60_000 },
+  { name: "시간당", max: 30, windowMs: 60 * 60_000 },
+  { name: "일별", max: 100, windowMs: 24 * 60 * 60_000 },
+];
+
 type Bucket = { count: number; resetAt: number };
-const buckets = new Map<string, Bucket>();
+const buckets: Map<string, Bucket>[] = LIMITS.map(() => new Map());
 
 function getClientIp(req: VercelRequest): string {
   const fwd = req.headers["x-forwarded-for"];
@@ -21,24 +25,35 @@ function getClientIp(req: VercelRequest): string {
   return req.socket?.remoteAddress ?? "unknown";
 }
 
-function checkRateLimit(ip: string): { ok: boolean; retryAfter: number } {
+function checkRateLimit(ip: string): { ok: boolean; retryAfter: number; kind?: string } {
   const now = Date.now();
-  const b = buckets.get(ip);
-  if (!b || now >= b.resetAt) {
-    buckets.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return { ok: true, retryAfter: 0 };
+  for (let i = 0; i < LIMITS.length; i++) {
+    const b = buckets[i].get(ip);
+    if (b && now < b.resetAt && b.count >= LIMITS[i].max) {
+      return {
+        ok: false,
+        retryAfter: Math.ceil((b.resetAt - now) / 1000),
+        kind: LIMITS[i].name,
+      };
+    }
   }
-  if (b.count >= RATE_LIMIT_MAX) {
-    return { ok: false, retryAfter: Math.ceil((b.resetAt - now) / 1000) };
+  for (let i = 0; i < LIMITS.length; i++) {
+    const b = buckets[i].get(ip);
+    if (!b || now >= b.resetAt) {
+      buckets[i].set(ip, { count: 1, resetAt: now + LIMITS[i].windowMs });
+    } else {
+      b.count += 1;
+    }
   }
-  b.count += 1;
   return { ok: true, retryAfter: 0 };
 }
 
 function sweepBuckets() {
   const now = Date.now();
-  for (const [k, v] of buckets) {
-    if (now >= v.resetAt) buckets.delete(k);
+  for (const map of buckets) {
+    for (const [k, v] of map) {
+      if (now >= v.resetAt) map.delete(k);
+    }
   }
 }
 
@@ -89,7 +104,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader("Retry-After", String(rl.retryAfter));
     return res
       .status(429)
-      .json({ error: `요청이 너무 많습니다. ${rl.retryAfter}초 후 다시 시도해주세요.` });
+      .json({
+        error: `${rl.kind} 사용 한도 초과. ${rl.retryAfter}초 후 다시 시도해주세요.`,
+      });
   }
 
   const { text, voice, rate, pitch } = (req.body ?? {}) as {
