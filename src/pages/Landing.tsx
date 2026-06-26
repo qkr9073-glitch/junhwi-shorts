@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 const TOOLS = [
   { emoji: "🎯", label: "맞춤 로드맵", to: "/roadmap" },
   { emoji: "🎙️", label: "AI 성우", to: "/tts" },
-  { emoji: "📝", label: "대본 추출", to: "/subtitle" },
-  { emoji: "🗺️", label: "쇼츠 설계도", to: "/blueprints" },
+  { emoji: "🗺️", label: "일본 체험판", to: "/blueprints" },
   { emoji: "📚", label: "전자책 서재", to: "/ebooks" },
   { emoji: "🦘", label: "캥거루 점프", to: "/game" },
 ];
@@ -61,9 +60,9 @@ export default function Landing() {
           <b className="text-white">현재 탑재된 기능만으로 충분히 실습이 가능합니다</b>.
         </p>
 
-        {/* 도구 6개 미니 그리드 */}
+        {/* 도구 미니 그리드 */}
         <div
-          className="mt-8 sm:mt-10 grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 w-full animate-fade-up"
+          className="mt-8 sm:mt-10 grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3 w-full animate-fade-up"
           style={{ animationDelay: "0.5s" }}
         >
           {TOOLS.map((t) => (

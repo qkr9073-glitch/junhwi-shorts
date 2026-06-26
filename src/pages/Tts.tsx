@@ -166,6 +166,10 @@ export default function Tts() {
                 여러분들이 AI 성우 대본 작성을{" "}
                 <b className="text-gold-tip">"평생 무료"</b>로 실습해 볼 수 있습니다.
               </p>
+              <p className="text-[12.5px] sm:text-[13px] text-gold-tip font-extrabold mt-1.5 leading-relaxed">
+                🎁 무료로 실습 가능!{" "}
+                <span className="text-ink-muted font-semibold">(성능이 조금 아쉽긴 합니다)</span>
+              </p>
               <p className="text-[11.5px] sm:text-[12px] text-ink-muted mt-1.5 leading-relaxed">
                 🔒 업그레이드 버전 <b>대본 작성 봇</b>과 <b>TTS 작성 가이드</b>는{" "}
                 유료 수강생 전용입니다.

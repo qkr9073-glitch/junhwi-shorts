@@ -1,9 +1,3 @@
-import LockGate from "../components/LockGate";
-
-// sha256("junwhigood")
-const BLUEPRINTS_PASSWORD_HASH =
-  "a9912d7be9902bcf47e52f2ea54c16072f3f16ed3cec23170b6aa216aa2f9df1";
-
 type Blueprint = {
   href: string;
   flag: string;
@@ -18,17 +12,6 @@ type Blueprint = {
 
 const BLUEPRINTS: Blueprint[] = [
   {
-    href: "https://chatgpt.com/g/g-6873caaad278819187211d5e9c2dbf00-migug-syoceu-seolgyedo",
-    flag: "🇺🇸",
-    country: "미국",
-    countryEn: "USA",
-    title: "미국 쇼츠 설계도",
-    desc: "미국 쇼츠 트렌드와 문화 코드에 맞춘 아이디어 · 대본 설계 GPT",
-    accent: "from-red-500 via-white/80 to-blue-600",
-    accentText: "text-red-400",
-    accentBg: "from-red-500 to-blue-600",
-  },
-  {
     href: "https://chatgpt.com/g/g-6808e84393c08191aad85a172d094449-ilbon-syoceu-seolgyedo",
     flag: "🇯🇵",
     country: "일본",
@@ -39,46 +22,10 @@ const BLUEPRINTS: Blueprint[] = [
     accentText: "text-rose-400",
     accentBg: "from-rose-500 to-red-600",
   },
-  {
-    href: "https://chatgpt.com/g/g-6873cd20aa408191a0cd033496c62fa8-seupein-syoceu-seolgyedo",
-    flag: "🇪🇸",
-    country: "스페인",
-    countryEn: "SPAIN",
-    title: "스페인 쇼츠 설계도",
-    desc: "스페인어권 쇼츠 감성과 리듬에 맞춘 대본 · 아이디어 설계 GPT",
-    accent: "from-yellow-400 via-orange-400 to-red-500",
-    accentText: "text-amber-400",
-    accentBg: "from-yellow-500 to-red-600",
-  },
-  {
-    href: "https://chatgpt.com/g/g-6873ce1826fc819188b583294defac2e-peurangseu-syoceu-seolgyedo",
-    flag: "🇫🇷",
-    country: "프랑스",
-    countryEn: "FRANCE",
-    title: "프랑스 쇼츠 설계도",
-    desc: "프랑스 시청자 맞춤 위트 · 스타일로 쇼츠를 설계해주는 GPT",
-    accent: "from-blue-600 via-white/80 to-red-500",
-    accentText: "text-blue-400",
-    accentBg: "from-blue-600 to-red-500",
-  },
 ];
 
 export default function Blueprints() {
-  return (
-    <LockGate
-      storageKey="unlock_blueprints"
-      passwordHash={BLUEPRINTS_PASSWORD_HASH}
-      lockLabel="2차 공개 · BLUEPRINTS"
-      lockTitle="쇼츠 설계도"
-      lockSubtitle="국가별 쇼츠 설계 GPT 4종 (미국 · 일본 · 스페인 · 프랑스)"
-      lockDescription="각 국가의 쇼츠 트렌드에 맞춘 아이디어·대본 설계 GPT. 본 섹션은 무료강의를 끝까지 시청한 수강자에게만 공개됩니다."
-      hint="강의 후반부에 공개되는 2차 비밀번호를 입력하세요."
-      gradientFrom="from-indigo-600"
-      gradientTo="to-purple-800"
-    >
-      <BlueprintsContent />
-    </LockGate>
-  );
+  return <BlueprintsContent />;
 }
 
 function BlueprintsContent() {
@@ -87,21 +34,21 @@ function BlueprintsContent() {
       {/* 헤더 */}
       <div className="mb-8 sm:mb-10">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 text-white text-[11px] font-extrabold tracking-wider shadow-[0_4px_16px_rgba(139,92,246,0.4)] mb-4">
-          🧭 GLOBAL GPT COLLECTION
+          🇯🇵 일본 쇼츠 설계도 · 무료 체험판
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-ink leading-[1.1]">
-          쇼츠{" "}
+          일본 쇼츠{" "}
           <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
             설계도
           </span>
         </h1>
         <p className="text-[13.5px] sm:text-[15px] text-ink-muted mt-3 max-w-2xl leading-relaxed">
-          각 국가의 쇼츠 트렌드 · 문화에 맞춘 <b className="text-ink">아이디어 · 대본 설계 GPT</b>. 원하는 나라를 골라 ChatGPT에서 바로 사용하세요.
+          일본 시청자가 좋아하는 톤 · 포맷에 맞춘 <b className="text-ink">아이디어 · 대본 설계 GPT</b>. 무료 체험판으로 지금 바로 ChatGPT에서 사용해보세요.
         </p>
       </div>
 
-      {/* GPT 카드 4개 — 다크 프리미엄 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mb-8">
+      {/* GPT 카드 — 다크 프리미엄 */}
+      <div className="grid grid-cols-1 gap-5 sm:gap-6 mb-8 max-w-2xl">
         {BLUEPRINTS.map((b, i) => (
           <a
             key={b.href}
@@ -201,10 +148,10 @@ function BlueprintsContent() {
               </span>
             </div>
             <div className="text-[14px] sm:text-[15px] font-extrabold text-ink mb-1.5 leading-snug">
-              국가별 기능 + 숏핑 작성 기능이 모두 통합된 <span className="text-orange-600">쇼츠 설계도 최종 버전</span>은 유료 수강생 전용입니다
+              미국 · 스페인 · 프랑스 등 국가별 설계도 + 숏핑 작성 기능이 모두 통합된 <span className="text-orange-600">쇼츠 설계도 최종 버전</span>은 유료 수강생 전용입니다
             </div>
             <p className="text-[12.5px] text-ink-muted leading-relaxed">
-              위 라이트 버전은 국가별 개별 GPT로 공개해드려요. 최종 통합 버전은 유료 수강생에게만 제공되는 점 양해 부탁드립니다 🙏
+              위 <b className="text-ink">일본 쇼츠 설계도</b>는 무료 체험판으로 공개해드려요. 다른 국가 버전과 최종 통합 버전은 유료 수강생에게만 제공되는 점 양해 부탁드립니다 🙏
             </p>
           </div>
         </div>

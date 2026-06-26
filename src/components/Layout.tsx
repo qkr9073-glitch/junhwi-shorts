@@ -25,14 +25,7 @@ const NAV: NavItem[] = [
     emoji: "🎙️",
     label: "AI 성우 (TTS)",
     desc: "한·일·영·중 4개국 내레이션",
-    badge: "AI",
-  },
-  {
-    to: "/subtitle",
-    emoji: "📝",
-    label: "영상 대본 추출",
-    desc: "AI 자막·대본 뽑기",
-    badge: "AI",
+    badge: "체험판",
   },
   {
     to: "/game",
@@ -43,16 +36,14 @@ const NAV: NavItem[] = [
   {
     to: "/blueprints",
     emoji: "🗺️",
-    label: "쇼츠 설계도",
-    desc: "국가별 GPT (수강자 전용)",
-    badge: "🔒 2차",
+    label: "일본 체험판",
+    desc: "일본 쇼츠 설계 GPT",
   },
   {
     to: "/ebooks",
     emoji: "📚",
     label: "전자책 서재",
-    desc: "전자책 7권 (수강자 전용)",
-    badge: "🔒 1차",
+    desc: "무료 쇼츠 전자책 모음",
   },
 ];
 

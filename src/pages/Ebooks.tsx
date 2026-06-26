@@ -1,5 +1,3 @@
-import LockGate from "../components/LockGate";
-
 type Ebook = {
   emoji: string;
   title: string;
@@ -9,9 +7,49 @@ type Ebook = {
   coverImg?: string;
 };
 
-// sha256("easyshort")
-const EBOOKS_PASSWORD_HASH =
-  "09a50eb32d657e70cbd4f225a0da226bfacb0202c0592cb816ef349674e071ed";
+// NEW · 6기 무료강의 쇼츠 가이드북 시리즈 (VOL.01~04) — 표지 없이 그라디언트+타이포
+const NEW_GUIDES: Ebook[] = [
+  {
+    emoji: "✂️",
+    title: "쇼츠 편집, 이 영상 하나로 끝",
+    bullets: [
+      "캡컷 + 타입캐스트로 만드는 쇼핑 쇼츠 편집 올인원",
+      "자막 자동완성 · 컷편집 · 폰트까지 처음부터 끝까지",
+    ],
+    href: "/ebooks/guide-editing.pdf",
+    gradient: "from-violet-600 to-indigo-700",
+  },
+  {
+    emoji: "💰",
+    title: "쇼츠 하나로 월급 300만 원",
+    bullets: [
+      "조회수보다 강한 '쇼핑 쇼츠' 수익 구조",
+      "상품 찾기부터 AI 기획까지",
+    ],
+    href: "/ebooks/guide-shopping-salary.pdf",
+    gradient: "from-indigo-600 to-blue-700",
+  },
+  {
+    emoji: "🎯",
+    title: "나이는 중요하지 않습니다",
+    bullets: [
+      "쇼츠 조회수를 결정하는 4가지",
+      "벤치마킹 · 해외 검색 · 시의성 · AI 활용",
+    ],
+    href: "/ebooks/guide-views.pdf",
+    gradient: "from-blue-600 to-sky-700",
+  },
+  {
+    emoji: "🌏",
+    title: "한 영상으로 수익을 세 배",
+    bullets: [
+      "이미 터진 영상을 한·중·일에 '수출'하는 법",
+      "영상 찾기 → AI 대본 → AI 목소리 → 편집",
+    ],
+    href: "/ebooks/guide-global.pdf",
+    gradient: "from-sky-600 to-indigo-700",
+  },
+];
 
 // 세로형 표지 (5권) — 상단 큰 그리드
 const PORTRAIT_BOOKS: Ebook[] = [
@@ -135,22 +173,68 @@ function BookInfo({ book }: { book: Ebook }) {
   );
 }
 
-export default function Ebooks() {
+// 세로형 표지 카드 (표지 이미지 or 그라디언트+타이포 폴백)
+function PortraitCard({ book: b, index: i }: { book: Ebook; index: number }) {
   return (
-    <LockGate
-      storageKey="unlock_ebooks"
-      passwordHash={EBOOKS_PASSWORD_HASH}
-      lockLabel="1차 공개 · EBOOKS"
-      lockTitle="무료 전자책 서재"
-      lockSubtitle="박준휘쌤이 직접 정리한 무료 전자책 7권"
-      lockDescription="쇼츠 입문부터 수익화까지 — 본 섹션은 무료강의를 끝까지 시청한 수강자에게만 공개됩니다."
-      hint="강의 중간에 공개되는 1차 비밀번호를 입력하세요."
-      gradientFrom="from-rose-500"
-      gradientTo="to-fuchsia-700"
-    >
-      <EbooksContent />
-    </LockGate>
+    <a href={b.href} target="_blank" rel="noreferrer" className="group block">
+      {/* 세로 표지 (2:3) — 크게 + 프리미엄 링 */}
+      <div className="relative rounded-r-xl rounded-l-[4px] p-[2px] bg-gradient-to-br from-amber-400/70 via-yellow-300/40 to-amber-600/60 shadow-[0_14px_36px_rgba(0,0,0,0.18)] group-hover:shadow-[0_28px_60px_rgba(251,191,36,0.35)] transition-all duration-500 group-hover:-translate-y-3 group-hover:-rotate-[1.5deg] transform-gpu">
+        <div className="relative aspect-[2/3] rounded-r-[calc(0.75rem-2px)] rounded-l-[3px] overflow-hidden">
+          {b.coverImg ? (
+            <>
+              <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+              <img
+                src={b.coverImg}
+                alt={b.title}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </>
+          ) : (
+            <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
+          )}
+          {/* 책등 */}
+          <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/50 via-black/15 to-transparent" />
+          {/* 호버 광택 */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {/* FREE 뱃지 */}
+          <div className="absolute top-3 right-3 text-[9px] font-black tracking-wider bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-2.5 py-1 rounded-full shadow-md">
+            FREE
+          </div>
+          {/* 이미지 없을 때만 오버레이 */}
+          {!b.coverImg && (
+            <>
+              <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
+              <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
+              <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
+                <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
+                  VOL. 0{i + 1}
+                </div>
+                <div className="text-center">
+                  <div className="text-[56px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
+                    {b.emoji}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-[14px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
+                    {b.title}
+                  </h3>
+                  <div className="text-[8.5px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
+                    박준휘 · SHORTS SERIES
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+      <BookInfo book={b} />
+    </a>
   );
+}
+
+export default function Ebooks() {
+  return <EbooksContent />;
 }
 
 function EbooksContent() {
@@ -173,69 +257,26 @@ function EbooksContent() {
         </p>
       </div>
 
+      {/* NEW · 가이드북 시리즈 (VOL.01~04) */}
+      <div className="mb-10 sm:mb-12">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="h-[2px] flex-1 bg-gradient-to-r from-transparent via-indigo-300 to-indigo-400" />
+          <div className="text-[11px] font-black tracking-[0.2em] text-indigo-600 uppercase">
+            📕 NEW · 쇼츠 가이드북 시리즈
+          </div>
+          <div className="h-[2px] flex-1 bg-gradient-to-l from-transparent via-indigo-300 to-indigo-400" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
+          {NEW_GUIDES.map((b, i) => (
+            <PortraitCard key={b.href} book={b} index={i} />
+          ))}
+        </div>
+      </div>
+
       {/* 세로형 5권 — 상단 그리드 */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-6 lg:gap-8 mb-10 sm:mb-12">
         {PORTRAIT_BOOKS.map((b, i) => (
-          <a
-            key={b.href}
-            href={b.href}
-            target="_blank"
-            rel="noreferrer"
-            className="group block"
-          >
-            {/* 세로 표지 (2:3) — 크게 + 프리미엄 링 */}
-            <div className="relative rounded-r-xl rounded-l-[4px] p-[2px] bg-gradient-to-br from-amber-400/70 via-yellow-300/40 to-amber-600/60 shadow-[0_14px_36px_rgba(0,0,0,0.18)] group-hover:shadow-[0_28px_60px_rgba(251,191,36,0.35)] transition-all duration-500 group-hover:-translate-y-3 group-hover:-rotate-[1.5deg] transform-gpu">
-              <div className="relative aspect-[2/3] rounded-r-[calc(0.75rem-2px)] rounded-l-[3px] overflow-hidden">
-                {b.coverImg ? (
-                  <>
-                    <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
-                    <img
-                      src={b.coverImg}
-                      alt={b.title}
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </>
-                ) : (
-                  <div className={`absolute inset-0 bg-gradient-to-br ${b.gradient}`} />
-                )}
-                {/* 책등 */}
-                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/50 via-black/15 to-transparent" />
-                {/* 호버 광택 */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                {/* FREE 뱃지 */}
-                <div className="absolute top-3 right-3 text-[9px] font-black tracking-wider bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-2.5 py-1 rounded-full shadow-md">
-                  FREE
-                </div>
-                {/* 이미지 없을 때만 오버레이 */}
-                {!b.coverImg && (
-                  <>
-                    <div className="absolute top-5 left-6 right-4 h-px bg-white/35" />
-                    <div className="absolute bottom-5 left-6 right-4 h-px bg-white/35" />
-                    <div className="relative h-full flex flex-col justify-between p-4 pl-5 text-white">
-                      <div className="text-[9px] font-bold tracking-[0.2em] opacity-80">
-                        VOL. 0{i + 1}
-                      </div>
-                      <div className="text-center">
-                        <div className="text-[56px] leading-none drop-shadow-lg group-hover:scale-110 transition-transform duration-500">
-                          {b.emoji}
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-[14px] font-extrabold leading-tight drop-shadow-md mb-2 break-keep">
-                          {b.title}
-                        </h3>
-                        <div className="text-[8.5px] font-bold tracking-[0.18em] opacity-75 border-t border-white/35 pt-1.5">
-                          박준휘 · SHORTS SERIES
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-            <BookInfo book={b} />
-          </a>
+          <PortraitCard key={b.href} book={b} index={i} />
         ))}
       </div>
 
