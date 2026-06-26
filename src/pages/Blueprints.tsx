@@ -42,7 +42,7 @@ function BlueprintsContent() {
             설계도
           </span>
         </h1>
-        <p className="text-[13.5px] sm:text-[15px] text-ink-muted mt-3 max-w-2xl leading-relaxed">
+        <p className="text-[13.5px] sm:text-[15px] text-ink-muted mt-3 max-w-2xl leading-relaxed break-keep">
           일본 시청자가 좋아하는 톤 · 포맷에 맞춘 <b className="text-ink">아이디어 · 대본 설계 GPT</b>. 무료 체험판으로 지금 바로 ChatGPT에서 사용해보세요.
         </p>
       </div>

@@ -18,6 +18,7 @@ const NEW_GUIDES: Ebook[] = [
     ],
     href: "/ebooks/guide-editing.pdf",
     gradient: "from-violet-600 to-indigo-700",
+    coverImg: "/ebooks/guide-editing.png",
   },
   {
     emoji: "💰",
@@ -28,6 +29,7 @@ const NEW_GUIDES: Ebook[] = [
     ],
     href: "/ebooks/guide-shopping-salary.pdf",
     gradient: "from-indigo-600 to-blue-700",
+    coverImg: "/ebooks/guide-shopping-salary.png",
   },
   {
     emoji: "🎯",
@@ -38,6 +40,7 @@ const NEW_GUIDES: Ebook[] = [
     ],
     href: "/ebooks/guide-views.pdf",
     gradient: "from-blue-600 to-sky-700",
+    coverImg: "/ebooks/guide-views.png",
   },
   {
     emoji: "🌏",
@@ -48,6 +51,7 @@ const NEW_GUIDES: Ebook[] = [
     ],
     href: "/ebooks/guide-global.pdf",
     gradient: "from-sky-600 to-indigo-700",
+    coverImg: "/ebooks/guide-global.png",
   },
 ];
 
